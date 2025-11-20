@@ -31,17 +31,37 @@
         return;
       }
       cont.innerHTML = '';
-      pedidos.slice().reverse().forEach(p => {
+      pedidos.slice().reverse().forEach((p, idx, arr) => {
         const div = document.createElement('div');
         div.className = 'pedido';
         div.innerHTML = `
           <div class="pedido-nombre">${p.nombre}</div>
           <div class="pedido-fecha">${p.fecha}</div>
+          <div class="pedido-correo"><strong>Correo:</strong> <a href="mailto:${p.correo}">${p.correo}</a></div>
           <ul class="pedido-productos">
             ${p.productos.map(prod => `<li>${prod.qty} x ${prod.name} (${prod.price})</li>`).join('')}
           </ul>
           <div class="pedido-total">Total: $${p.total}</div>
+          <button class="btn-entregado">Entregado</button>
         `;
+        // Botón Entregado
+        div.querySelector('.btn-entregado').addEventListener('click', function() {
+          if(confirm('¿Marcar este pedido como entregado y notificar al cliente?')) {
+            // Simular notificación por correo
+            const asunto = encodeURIComponent('¡Tu pedido ha sido entregado!');
+            const cuerpo = encodeURIComponent(`Hola ${p.nombre},\n\nTu pedido realizado el ${p.fecha} ha sido entregado.\n\n¡Gracias por tu preferencia!`);
+            window.location.href = `mailto:${p.correo}?subject=${asunto}&body=${cuerpo}`;
+            // Eliminar pedido
+            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            // Buscar el pedido por nombre, correo y fecha (único)
+            const idx = pedidos.findIndex(x => x.nombre === p.nombre && x.correo === p.correo && x.fecha === p.fecha);
+            if(idx !== -1) {
+              pedidos.splice(idx, 1);
+              localStorage.setItem('pedidos', JSON.stringify(pedidos));
+              renderPedidos();
+            }
+          }
+        });
         cont.appendChild(div);
       });
     }

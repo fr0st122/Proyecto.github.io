@@ -267,6 +267,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             nombre = nombre.trim();
+            let correo = '';
+            while(true) {
+                correo = prompt('Correo electrónico del cliente (obligatorio):');
+                if(!correo) {
+                    alert('Debes ingresar un correo.');
+                    continue;
+                }
+                correo = correo.trim();
+                // Validación básica de correo
+                if(!/^\S+@\S+\.\S+$/.test(correo)) {
+                    alert('Correo no válido. Intenta de nuevo.');
+                    continue;
+                }
+                break;
+            }
             // Calcular total
             let total = 0;
             carrito.forEach(i => {
@@ -277,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
             pedidos.push({
                 nombre,
+                correo,
                 productos: carrito.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
                 total: total.toFixed(2),
                 fecha: new Date().toLocaleString()
