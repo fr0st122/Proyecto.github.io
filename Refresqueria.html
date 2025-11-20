@@ -389,14 +389,18 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script>
-// Theme toggle: persist preference and apply dark class
+// Theme toggle: persist preference and apply dark class, sincroniza texto del label
 (function(){
     const input = document.getElementById('theme-toggle');
     const root = document.documentElement;
-    if(!input) return;
+    const label = document.getElementById('theme-label');
+    if(!input || !label) return;
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+    function setLabel(theme) {
+        label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
+    }
     const applyTheme = (theme)=>{
         root.classList.remove('dark','light');
         if(theme === 'dark'){
@@ -407,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             root.classList.add('light');
             input.checked = false;
         }
+        setLabel(theme);
     };
 
     // Initialize: stored preference overrides system; otherwise follow system
