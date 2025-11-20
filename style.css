@@ -1,5 +1,4 @@
-:/* Estilos base para Refresquería */
-:root{}
+/* Estilos base para Refresquería */
 :root{
   --bg: #fafafa;
   --text: #222;
@@ -21,7 +20,7 @@
     --text: #e6e6e6;
     --muted: #bdbdbd;
     --accent: #ff8a65;
-    --accent-contrast: #111;
+    --accent-contrast: #fff;
     --card-bg: #151618;
     --panel-bg: #121212;
     --shadow: rgba(0,0,0,0.6);
@@ -38,10 +37,14 @@
   --text: #e6e6e6;
   --muted: #bdbdbd;
   --accent: #ff8a65;
-  --accent-contrast: #111;
+  --accent-contrast: #fff;
   --card-bg: #151618;
   --panel-bg: #121212;
   --shadow: rgba(0,0,0,0.6);
+  --border: rgba(255,255,255,0.06);
+  --btn-primary: #4caf50;
+  --btn-text: #111;
+  --small-btn-border: rgba(255,255,255,0.08);
 }
 
 html, body { margin:0; padding:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
