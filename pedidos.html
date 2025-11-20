@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos Guardados</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .pedido-lista { max-width: 600px; margin: 32px auto; background: var(--card-bg); border-radius: 10px; box-shadow: 0 4px 10px var(--shadow); padding: 24px; }
+    .pedido { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .pedido:last-child { border-bottom: none; }
+    .pedido-nombre { font-weight: bold; color: var(--accent); font-size: 1.1em; }
+    .pedido-fecha { color: var(--muted); font-size: 0.95em; }
+    .pedido-total { font-weight: bold; }
+    .pedido-productos { margin: 8px 0 0 0; padding-left: 18px; }
+    .volver-link { display: inline-block; margin-bottom: 18px; color: var(--accent); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="pedido-lista">
+    <a href="index.html" class="volver-link">← Volver a la tienda</a>
+    <h1>Pedidos Guardados</h1>
+    <div id="pedidos-container"></div>
+  </div>
+  <script>
+    function renderPedidos() {
+      const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+      const cont = document.getElementById('pedidos-container');
+      if (!pedidos.length) {
+        cont.innerHTML = '<p>No hay pedidos guardados.</p>';
+        return;
+      }
+      cont.innerHTML = '';
+      pedidos.slice().reverse().forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'pedido';
+        div.innerHTML = `
+          <div class="pedido-nombre">${p.nombre}</div>
+          <div class="pedido-fecha">${p.fecha}</div>
+          <ul class="pedido-productos">
+            ${p.productos.map(prod => `<li>${prod.qty} x ${prod.name} (${prod.price})</li>`).join('')}
+          </ul>
+          <div class="pedido-total">Total: $${p.total}</div>
+        `;
+        cont.appendChild(div);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', renderPedidos);
+  </script>
+</body>
+</html>

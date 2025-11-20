@@ -18,6 +18,7 @@
         <div class="menu-item" onclick="showCategory('dulces')">🍬<span class="text">Dulces</span></div>
         <div class="menu-item" onclick="showCategory('contacto')">📞<span class="text">Contacto</span></div>
         <div class="menu-item" onclick="showCategory('sobre')">ℹ️<span class="text">Sobre Nosotros</span></div>
+        <a class="menu-item" href="pedidos.html" style="text-decoration:none">📦<span class="text">Pedidos</span></a>
     </div>
 
     <div class="content">
@@ -25,11 +26,12 @@
             <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
             <h1 class="category-title">Bienvenido a Refresquería Deliciosa</h1>
             <div class="header-actions" style="display:flex;gap:8px;align-items:center">
-                    <div class="theme-toggle">
+                    <div class="theme-toggle" style="display:flex;align-items:center">
                         <div class="theme-switch">
                             <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
                             <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
                         </div>
+                        <span id="theme-label" class="theme-label">Claro</span>
                     </div>
                 <div class="cart-toggle">
                     <button id="ver-carrito">🛒 Ver Carrito (<span id="cart-count">0</span>)</button>
@@ -259,7 +261,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if(pagarBtn) {
         pagarBtn.addEventListener('click', () => {
             if(carrito.length === 0) { alert('El carrito está vacío.'); return; }
-            alert('Pago simulado. Gracias por tu compra.');
+            let nombre = prompt('¿A nombre de quién es el pedido?');
+            if(!nombre || !nombre.trim()) {
+                alert('Debes ingresar un nombre para guardar el pedido.');
+                return;
+            }
+            nombre = nombre.trim();
+            // Calcular total
+            let total = 0;
+            carrito.forEach(i => {
+                const priceNum = parseFloat((i.price || '').replace(/[^0-9.-]+/g, '')) || 0;
+                total += priceNum * i.qty;
+            });
+            // Guardar pedido en localStorage
+            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            pedidos.push({
+                nombre,
+                productos: carrito.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+                total: total.toFixed(2),
+                fecha: new Date().toLocaleString()
+            });
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            alert('Pedido guardado para ' + nombre + '.');
             carrito = [];
             guardarCarrito();
             actualizarPanelCarrito();
