@@ -47,6 +47,24 @@
     </div>
 
     <!-- Panel de carrito -->
+            <!-- Modal de datos de cliente para pago -->
+            <div id="modal-datos" style="display:none;position:fixed;z-index:1000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;">
+                <form id="form-datos" style="background:var(--card-bg);padding:28px 22px 18px 22px;border-radius:12px;box-shadow:0 4px 18px var(--shadow);min-width:280px;max-width:90vw;display:flex;flex-direction:column;gap:14px;">
+                    <h2 style="margin:0 0 8px 0;font-size:1.2em;color:var(--accent)">Datos para el pedido</h2>
+                    <label>Nombre:
+                        <input id="input-nombre" name="nombre" type="text" required style="width:100%;padding:7px 8px;margin-top:3px;border-radius:6px;border:1px solid var(--border);">
+                    </label>
+                    <span id="error-nombre" style="color:#e74c3c;font-size:13px;display:none"></span>
+                    <label>Correo electrónico:
+                        <input id="input-correo" name="correo" type="email" required style="width:100%;padding:7px 8px;margin-top:3px;border-radius:6px;border:1px solid var(--border);">
+                    </label>
+                    <span id="error-correo" style="color:#e74c3c;font-size:13px;display:none"></span>
+                    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+                        <button type="button" id="cancelar-datos" style="background:#ccc;color:#222;border:none;padding:7px 16px;border-radius:6px;">Cancelar</button>
+                        <button type="submit" id="guardar-datos" style="background:var(--accent);color:var(--accent-contrast);border:none;padding:7px 16px;border-radius:6px;">Guardar pedido</button>
+                    </div>
+                </form>
+            </div>
     <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
     <aside id="cart-panel" class="cart-panel" aria-hidden="true">
         <div class="cart-header">
@@ -258,30 +276,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const pagarBtn = document.getElementById('pagar-carrito');
-    if(pagarBtn) {
+    const modalDatos = document.getElementById('modal-datos');
+    const formDatos = document.getElementById('form-datos');
+    const inputNombre = document.getElementById('input-nombre');
+    const inputCorreo = document.getElementById('input-correo');
+    const errorNombre = document.getElementById('error-nombre');
+    const errorCorreo = document.getElementById('error-correo');
+    const cancelarDatos = document.getElementById('cancelar-datos');
+    if(pagarBtn && modalDatos && formDatos) {
         pagarBtn.addEventListener('click', () => {
             if(carrito.length === 0) { alert('El carrito está vacío.'); return; }
-            let nombre = prompt('¿A nombre de quién es el pedido?');
-            if(!nombre || !nombre.trim()) {
-                alert('Debes ingresar un nombre para guardar el pedido.');
-                return;
+            inputNombre.value = '';
+            inputCorreo.value = '';
+            errorNombre.style.display = 'none';
+            errorCorreo.style.display = 'none';
+            modalDatos.style.display = 'flex';
+            inputNombre.focus();
+        });
+        cancelarDatos.addEventListener('click', () => {
+            modalDatos.style.display = 'none';
+        });
+        formDatos.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let nombre = inputNombre.value.trim();
+            let correo = inputCorreo.value.trim();
+            let valido = true;
+            if(!nombre) {
+                errorNombre.textContent = 'El nombre es obligatorio.';
+                errorNombre.style.display = 'block';
+                valido = false;
+            } else {
+                errorNombre.style.display = 'none';
             }
-            nombre = nombre.trim();
-            let correo = '';
-            while(true) {
-                correo = prompt('Correo electrónico del cliente (obligatorio):');
-                if(!correo) {
-                    alert('Debes ingresar un correo.');
-                    continue;
-                }
-                correo = correo.trim();
-                // Validación básica de correo
-                if(!/^\S+@\S+\.\S+$/.test(correo)) {
-                    alert('Correo no válido. Intenta de nuevo.');
-                    continue;
-                }
-                break;
+            if(!/^\S+@\S+\.\S+$/.test(correo)) {
+                errorCorreo.textContent = 'Correo electrónico no válido.';
+                errorCorreo.style.display = 'block';
+                valido = false;
+            } else {
+                errorCorreo.style.display = 'none';
             }
+            if(!valido) return;
             // Calcular total
             let total = 0;
             carrito.forEach(i => {
@@ -302,6 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito = [];
             guardarCarrito();
             actualizarPanelCarrito();
+            modalDatos.style.display = 'none';
         });
     }
 
