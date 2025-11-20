@@ -28,7 +28,7 @@ body, html { margin:0; padding:0; font-family: Arial, sans-serif; background:#fa
 .cart-item{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #eee }
 .cart-item .cart-item-info{ text-align:left }
 .cart-item-actions button{ margin-left:6px; padding:6px 8px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer }
-.cart-footer{ position:absolute; bottom:20px; left:18px; right:18px }
+.cart-footer{ position:absolute; bottom:48px; left:18px; right:18px }
 .cart-footer button{ margin-right:8px; padding:8px 10px; border-radius:6px; border:none; background:#ff7f50; color:#fff }
 
 /* Cart header and scroll behavior */
