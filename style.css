@@ -34,7 +34,7 @@ body, html { margin:0; padding:0; font-family: Arial, sans-serif; background:#fa
 /* Cart header and scroll behavior */
 .cart-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px }
 .close-cart{ background:transparent; border:none; font-size:18px; cursor:pointer }
-#cart-items{ max-height: calc(100vh - 260px); overflow:auto; padding-right:6px }
+#cart-items{ max-height: calc(100vh - 320px); overflow:auto; padding-right:6px }
 
 /* Responsive */
 @media (max-width:800px){
@@ -57,7 +57,7 @@ body, html { margin:0; padding:0; font-family: Arial, sans-serif; background:#fa
   /* Empujar un poco más el footer del carrito en móvil para evitar superposición */
   .cart-footer{ bottom:96px; }
   /* Ajuste de la lista en móvil para dejar espacio al footer */
-  #cart-items{ max-height: calc(100vh - 320px); }
+  #cart-items{ max-height: calc(100vh - 420px); }
 }
 
 /* Ajustes del sidebar para pantallas grandes */
