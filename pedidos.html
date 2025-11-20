@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .pedido-lista { max-width: 600px; margin: 32px auto; background: var(--card-bg); border-radius: 10px; box-shadow: 0 4px 10px var(--shadow); padding: 24px; }
-    .pedido { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .pedido { border-bottom: 1px solid var(--border); padding: 16px 0; transition: background 0.3s; }
+    .pedido.entregado { background: #d4ffd4; opacity: 0.7; }
+    .btn-entregado[disabled] { opacity: 0.5; pointer-events: none; }
     .pedido:last-child { border-bottom: none; }
     .pedido-nombre { font-weight: bold; color: var(--accent); font-size: 1.1em; }
     .pedido-fecha { color: var(--muted); font-size: 0.95em; }
@@ -46,20 +48,17 @@
         `;
         // Botón Entregado
         div.querySelector('.btn-entregado').addEventListener('click', function() {
+          if(this.disabled) return;
           if(confirm('¿Marcar este pedido como entregado y notificar al cliente?')) {
-            // Simular notificación por correo
+            // Marcar visualmente
+            div.classList.add('entregado');
+            this.disabled = true;
+            this.textContent = 'Entregado ✓';
+            // Desglose de productos
+            const desglose = p.productos.map(prod => `- ${prod.qty} x ${prod.name} (${prod.price})`).join('%0A');
             const asunto = encodeURIComponent('¡Tu pedido ha sido entregado!');
-            const cuerpo = encodeURIComponent(`Hola ${p.nombre},\n\nTu pedido realizado el ${p.fecha} ha sido entregado.\n\n¡Gracias por tu preferencia!`);
+            const cuerpo = encodeURIComponent(`Hola ${p.nombre},\n\nTu pedido realizado el ${p.fecha} ha sido entregado.\n\nDesglose de tu compra:\n${p.productos.map(prod => `- ${prod.qty} x ${prod.name} (${prod.price})`).join('\n')}\n\nTotal: $${p.total}\n\n¡Gracias por tu preferencia!`);
             window.location.href = `mailto:${p.correo}?subject=${asunto}&body=${cuerpo}`;
-            // Eliminar pedido
-            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
-            // Buscar el pedido por nombre, correo y fecha (único)
-            const idx = pedidos.findIndex(x => x.nombre === p.nombre && x.correo === p.correo && x.fecha === p.fecha);
-            if(idx !== -1) {
-              pedidos.splice(idx, 1);
-              localStorage.setItem('pedidos', JSON.stringify(pedidos));
-              renderPedidos();
-            }
           }
         });
         cont.appendChild(div);
