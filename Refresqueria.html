@@ -83,17 +83,17 @@
 <script>
 const products = {
     refrescos: [
-        {name: "Cocacola", price: "$20.00", img: ""},
-        {name: "Sangria", price: "$20.00", img: ""},
-        {name: "Sprite", price: "$20.00", img: ""},
+        {name: "Cocacola", price: "$20.00", img: "Cocacola.png"},
+        {name: "Sangria", price: "$20.00", img: "Sangria.png"},
+        {name: "Sprite", price: "$20.00", img: "Sprite.png"},
     ],
     snacks: [
-        {name: "Tostitos preparados", price: "$50.00", img: ""},
-        {name: "Pepihuates", price: "$25.00", img: ""},
+        {name: "Tostitos preparados", price: "$50.00", img: "Tostitos_prep.png"},
+        {name: "Pepihuates", price: "$25.00", img: "Pepihuates.png"},
     ],
     dulces: [
-        {name: "Chocolate", price: "$8.00", img: ""},
-        {name: "Gomitas", price: "$7.00", img: ""},
+        {name: "Chocolate", price: "$8.00", img: "Chocolate.png"},
+        {name: "Gomitas", price: "$7.00", img: "Gomitas.png"},
     ],
     contacto: [
         {name: "Teléfono: 123-456-789", price: "", img: null},
@@ -208,9 +208,8 @@ function showCategory(category) {
 
             let imgHTML = "";
             if(product.img) {
-                imgHTML = `<img src="${product.img}" alt="${product.name}">`;
+                imgHTML = `<img src="${product.img}" alt="${product.name}" style="width:120px;height:120px;object-fit:contain;display:block;margin:0 auto 8px auto;">`;
             }
-
             card.innerHTML = `
                 ${imgHTML}
                 <h3>${product.name}</h3>
