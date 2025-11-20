@@ -53,76 +53,18 @@
       <h2>Tu Carrito</h2>
       <button id="close-cart" class="close-cart" aria-label="Cerrar carrito">✖</button>
     </div>
-    <div id="cart-items"></div>
-    <div class="cart-footer">
-      <p>Total: <strong id="cart-total">$0.00</strong></p>
-      <button id="vaciar-carrito">Vaciar carrito</button>
-      <button id="pagar-carrito">Pagar (simulado)</button>
-    </div>
-  </aside>
-</div>
-
-<script>
-const products = {
-  refrescos: [
-    {name: "Cocacola", price: "$20.00", img: ""},
-    {name: "Sangria", price: "$20.00", img: ""},
-    {name: "Sprite", price: "$20.00", img: ""},
-  ],
-  snacks: [
-    {name: "Tostitos preparados", price: "$50.00", img: ""},
-    {name: "Pepihuates", price: "$25.00", img: ""},
-  ],
-  dulces: [
-    {name: "Chocolate", price: "$8.00", img: ""},
-    {name: "Gomitas", price: "$7.00", img: ""},
-  ],
-  contacto: [
-    {name: "Teléfono: 123-456-789", price: "", img: null},
-    {name: "Correo: info@refresqueria.com", price: "", img: null},
-  ],
-  sobre: [
-    {name: "Somos una refresquería familiar dedicada a ofrecer los mejores productos frescos y deliciosos.", price: "", img: null},
-  ]
-};
-
-// Carrito en memoria y persistencia
-let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-
-function guardarCarrito() {
-  localStorage.setItem('carrito', JSON.stringify(carrito));
-  actualizarContador();
-}
-
-function agregarAlCarrito(item) {
-  const existente = carrito.find(i => i.name === item.name);
-  if(existente) {
-    existente.qty += 1;
-  } else {
-    carrito.push({...item, qty: 1});
-  }
-  guardarCarrito();
-  actualizarPanelCarrito();
-}
-
-function quitarDelCarrito(name) {
-  carrito = carrito.filter(i => i.name !== name);
-  guardarCarrito();
-  actualizarPanelCarrito();
-}
-
-function cambiarCantidad(name, delta) {
-  const item = carrito.find(i => i.name === name);
-  if(!item) return;
-  item.qty += delta;
-  if(item.qty <= 0) quitarDelCarrito(name);
-  guardarCarrito();
-  actualizarPanelCarrito();
-}
-
-function actualizarContador() {
-  const count = carrito.reduce((s, i) => s + i.qty, 0);
-  const counterEl = document.getElementById('cart-count');
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="refresh" content="0; url=Refresqueria.html">
+      <title>Redirigiendo a la tienda...</title>
+      <script>window.location.href = 'Refresqueria.html';</script>
+    </head>
+    <body>
+      <p>Redirigiendo a la tienda... Si no eres redirigido automáticamente, <a href="Refresqueria.html">haz clic aquí</a>.</p>
+    </body>
+    </html>
   if(counterEl) counterEl.textContent = count;
 }
 
