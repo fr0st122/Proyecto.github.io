@@ -321,21 +321,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 const priceNum = parseFloat((i.price || '').replace(/[^0-9.-]+/g, '')) || 0;
                 total += priceNum * i.qty;
             });
-            // Guardar pedido en localStorage
-            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
-            pedidos.push({
-                nombre,
-                correo,
-                productos: carrito.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+
+            // Preparar objeto de productos
+            const productosParaGuardar = carrito.map(i => ({ name: i.name, qty: i.qty, price: i.price }));
+
+            // --- Guardar pedido EN FIRESTORE en lugar de localStorage ---
+            // Usa serverTimestamp para tener una marca de tiempo consistente en el servidor
+            db.collection("pedidos").add({
+                nombre: nombre,
+                correo: correo,
+                productos: productosParaGuardar,
                 total: total.toFixed(2),
-                fecha: new Date().toLocaleString()
+                fecha: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                alert('Pedido guardado en la nube para ' + nombre + '.');
+                carrito = [];
+                guardarCarrito();
+                actualizarPanelCarrito();
+                modalDatos.style.display = 'none';
+            })
+            .catch(err => {
+                console.error("Error guardando pedido en Firestore:", err);
+                alert('Error al guardar pedido. Intenta de nuevo.');
             });
-            localStorage.setItem('pedidos', JSON.stringify(pedidos));
-            alert('Pedido guardado para ' + nombre + '.');
-            carrito = [];
-            guardarCarrito();
-            actualizarPanelCarrito();
-            modalDatos.style.display = 'none';
         });
     }
 
@@ -387,8 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<!-- Theme toggle: persist preference and apply dark class, sincroniza texto del label -->
 <script>
-// Theme toggle: persist preference and apply dark class, sincroniza texto del label
 (function(){
     const input = document.getElementById('theme-toggle');
     const root = document.documentElement;
@@ -423,6 +432,29 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', newTheme);
     });
 })();
+</script>
+
+<!-- Firebase scripts y configuración (agregadas al final) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script>
+  // Tu firebaseConfig (ya me la diste)
+  const firebaseConfig = {
+    apiKey: "AIzaSyAK2ex1uACVSPo_fxlgN_iDBAWlsBvV4RM",
+    authDomain: "refresqueriaporton.firebaseapp.com",
+    projectId: "refresqueriaporton",
+    storageBucket: "refresqueriaporton.firebasestorage.app",
+    messagingSenderId: "608366778564",
+    appId: "1:608366778564:web:39cf58eb7802c1e0189191",
+    measurementId: "G-LW73YBZVPF"
+  };
+
+  // Inicializar Firebase (si no está inicializado ya)
+  if(!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  // Referencia a Firestore
+  const db = firebase.firestore();
 </script>
 
 </body>
