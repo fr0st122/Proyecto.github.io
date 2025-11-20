@@ -26,7 +26,10 @@
       <h1 class="category-title">Bienvenido a Refresquería Deliciosa</h1>
       <div class="header-actions" style="display:flex;gap:8px;align-items:center">
         <div class="theme-toggle">
-          <button id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+          <div class="theme-switch">
+            <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
+            <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
+          </div>
         </div>
         <div class="cart-toggle">
           <button id="ver-carrito">🛒 Ver Carrito (<span id="cart-count">0</span>)</button>
@@ -314,32 +317,32 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 // Theme toggle: persist preference and apply dark class
 (function(){
-  const btn = document.getElementById('theme-toggle');
+  const input = document.getElementById('theme-toggle');
   const root = document.documentElement;
-  if(!btn) return;
+  if(!input) return;
   const stored = localStorage.getItem('theme');
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   const applyTheme = (theme)=>{
     root.classList.remove('dark','light');
-    if(theme === 'dark') root.classList.add('dark');
-    else if(theme === 'light') root.classList.add('light');
+    if(theme === 'dark'){
+      root.classList.add('dark');
+      input.checked = true;
+    }
+    else if(theme === 'light'){
+      root.classList.add('light');
+      input.checked = false;
+    }
   };
 
   // Initialize: stored preference overrides system; otherwise follow system
   if(stored === 'dark' || stored === 'light') applyTheme(stored);
   else applyTheme(prefersDark ? 'dark' : 'light');
 
-  const updateIcon = ()=> { btn.textContent = root.classList.contains('dark') ? '☀️' : '🌙'; };
-  updateIcon();
-
-  btn.addEventListener('click', ()=>{
-    // Toggle between dark and light explicitly
-    const isNowDark = root.classList.contains('dark');
-    const newTheme = isNowDark ? 'light' : 'dark';
+  input.addEventListener('change', ()=>{
+    const newTheme = input.checked ? 'dark' : 'light';
     applyTheme(newTheme);
     localStorage.setItem('theme', newTheme);
-    updateIcon();
   });
 })();
 </script>
