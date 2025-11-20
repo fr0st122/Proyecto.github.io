@@ -24,6 +24,18 @@
   }
 }
 
+/* Clase para activar modo oscuro manualmente */
+.dark {
+  --bg: #0f1112;
+  --text: #e6e6e6;
+  --muted: #bdbdbd;
+  --accent: #ff8a65;
+  --accent-contrast: #111;
+  --card-bg: #151618;
+  --panel-bg: #121212;
+  --shadow: rgba(0,0,0,0.6);
+}
+
 html, body { margin:0; padding:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
 #main-content { display:flex; min-height:100vh; }
 .sidebar { width:80px; background:var(--accent); padding-top:12px; box-shadow:2px 0 6px var(--shadow); }

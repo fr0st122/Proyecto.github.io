@@ -24,8 +24,13 @@
     <header class="page-header">
       <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
       <h1 class="category-title">Bienvenido a Refresquería Deliciosa</h1>
-      <div class="cart-toggle">
-        <button id="ver-carrito">🛒 Ver Carrito (<span id="cart-count">0</span>)</button>
+      <div class="header-actions" style="display:flex;gap:8px;align-items:center">
+        <div class="theme-toggle">
+          <button id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+        </div>
+        <div class="cart-toggle">
+          <button id="ver-carrito">🛒 Ver Carrito (<span id="cart-count">0</span>)</button>
+        </div>
       </div>
     </header>
 
@@ -304,6 +309,26 @@ document.addEventListener('DOMContentLoaded', () => {
   showCategory('inicio');
   actualizarPanelCarrito();
 });
+</script>
+
+<script>
+// Theme toggle: persist preference and apply dark class
+(function(){
+  const btn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  if(!btn) return;
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = stored ? stored === 'dark' : prefersDark;
+  if(isDark) root.classList.add('dark');
+  const updateIcon = ()=> { btn.textContent = root.classList.contains('dark') ? '☀️' : '🌙'; };
+  updateIcon();
+  btn.addEventListener('click', ()=>{
+    root.classList.toggle('dark');
+    localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+    updateIcon();
+  });
+})();
 </script>
 
 </body>
