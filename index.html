@@ -319,13 +319,26 @@ document.addEventListener('DOMContentLoaded', () => {
   if(!btn) return;
   const stored = localStorage.getItem('theme');
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = stored ? stored === 'dark' : prefersDark;
-  if(isDark) root.classList.add('dark');
+
+  const applyTheme = (theme)=>{
+    root.classList.remove('dark','light');
+    if(theme === 'dark') root.classList.add('dark');
+    else if(theme === 'light') root.classList.add('light');
+  };
+
+  // Initialize: stored preference overrides system; otherwise follow system
+  if(stored === 'dark' || stored === 'light') applyTheme(stored);
+  else applyTheme(prefersDark ? 'dark' : 'light');
+
   const updateIcon = ()=> { btn.textContent = root.classList.contains('dark') ? '☀️' : '🌙'; };
   updateIcon();
+
   btn.addEventListener('click', ()=>{
-    root.classList.toggle('dark');
-    localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+    // Toggle between dark and light explicitly
+    const isNowDark = root.classList.contains('dark');
+    const newTheme = isNowDark ? 'light' : 'dark';
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
     updateIcon();
   });
 })();
