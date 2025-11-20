@@ -45,6 +45,8 @@
           </ul>
           <div class="pedido-total">Total: $${p.total}</div>
           <button class="btn-entregado">Entregado</button>
+          <button class="btn-eliminar" style="margin-left:10px;background:#e74c3c;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Eliminar</button>
+          <button class="btn-eliminar" style="margin-left:10px;background:#e74c3c;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Eliminar</button>
         `;
         // Botón Entregado
         div.querySelector('.btn-entregado').addEventListener('click', function() {
@@ -59,6 +61,30 @@
             const asunto = encodeURIComponent('¡Tu pedido ha sido entregado!');
             const cuerpo = encodeURIComponent(`Hola ${p.nombre},\n\nTu pedido realizado el ${p.fecha} ha sido entregado.\n\nDesglose de tu compra:\n${p.productos.map(prod => `- ${prod.qty} x ${prod.name} (${prod.price})`).join('\n')}\n\nTotal: $${p.total}\n\n¡Gracias por tu preferencia!`);
             window.location.href = `mailto:${p.correo}?subject=${asunto}&body=${cuerpo}`;
+          }
+        });
+        // Botón Eliminar
+        div.querySelector('.btn-eliminar').addEventListener('click', function() {
+          if(confirm('¿Eliminar este pedido?')) {
+            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            const idx = pedidos.findIndex(x => x.nombre === p.nombre && x.correo === p.correo && x.fecha === p.fecha);
+            if(idx !== -1) {
+              pedidos.splice(idx, 1);
+              localStorage.setItem('pedidos', JSON.stringify(pedidos));
+              renderPedidos();
+            }
+          }
+        });
+        // Botón Eliminar
+        div.querySelector('.btn-eliminar').addEventListener('click', function() {
+          if(confirm('¿Eliminar este pedido?')) {
+            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            const idx = pedidos.findIndex(x => x.nombre === p.nombre && x.correo === p.correo && x.fecha === p.fecha);
+            if(idx !== -1) {
+              pedidos.splice(idx, 1);
+              localStorage.setItem('pedidos', JSON.stringify(pedidos));
+              renderPedidos();
+            }
           }
         });
         cont.appendChild(div);
