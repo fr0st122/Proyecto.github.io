@@ -7,29 +7,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Principal -->
-    <header class="main-header">
-        <div class="header-container">
-            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
-            <div class="logo-section">
-                <h1 class="site-title">EL PORTON</h1>
-                <span class="site-subtitle">Refresquería Familiar</span>
+    <!-- Header Móvil Optimizado -->
+<header class="mobile-header">
+    <div class="header-left">
+        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
+        <h1 class="site-title">EL PORTON</h1>
+    </div>
+    <div class="header-right">
+        <div class="theme-toggle">
+            <div class="theme-switch">
+                <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
+                <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
             </div>
-            <div class="header-actions">
-                <div class="theme-toggle">
-                    <div class="theme-switch">
-                        <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
-                        <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
-                    </div>
-                    <span id="theme-label" class="theme-label">Claro</span>
-                </div>
-                <button id="ver-carrito" class="cart-btn">
-                    🛒 Carrito <span id="cart-count" class="cart-count">0</span>
-                </button>
-            </div>
+            <span id="theme-label" class="theme-label">Claro</span>
         </div>
-    </header>
-
+        <button id="ver-carrito" class="cart-btn-mobile">
+            🛒 <span id="cart-count" class="cart-count">0</span>
+        </button>
+    </div>
+</header>
     <!-- Contenido Principal -->
     <div class="main-container">
         <!-- Sidebar de Navegación -->
