@@ -1,461 +1,518 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Refresquería EL PORTON</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Refresquería EL PORTON - Los mejores refrescos, snacks y dulces">
+    <title>Refresquería EL PORTON</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Header móvil mejorado -->
+    <header class="mobile-header">
+        <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+            <span class="hamburger">☰</span>
+        </button>
+        <h1 class="site-title">EL PORTON</h1>
+        <div class="header-actions">
+            <div class="theme-toggle">
+                <div class="theme-switch">
+                    <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
+                    <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
+                </div>
+                <span id="theme-label" class="theme-label">Claro</span>
+            </div>
+            <button id="ver-carrito" class="cart-button" aria-label="Ver carrito">
+                🛒 <span id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
 
-<!-- Contenido principal -->
-<div id="main-content">
-    <div class="sidebar">
-        <h2>Menú</h2>
-    <div class="menu-item" onclick="showCategory('inicio')">🏠<span class="text">Inicio</span></div>
-        <div class="menu-item" onclick="showCategory('refrescos')">🥤<span class="text">Refrescos</span></div>
-        <div class="menu-item" onclick="showCategory('snacks')">🍿<span class="text">Snacks</span></div>
-        <div class="menu-item" onclick="showCategory('dulces')">🍬<span class="text">Dulces</span></div>
-        <div class="menu-item" onclick="showCategory('contacto')">📞<span class="text">Contacto</span></div>
-        <div class="menu-item" onclick="showCategory('sobre')">ℹ️<span class="text">Sobre Nosotros</span></div>
+    <!-- Contenido principal -->
+    <div id="main-content">
+        <!-- Sidebar mejorado -->
+        <nav class="sidebar" aria-label="Navegación principal">
+            <div class="sidebar-header">
+                <h2>Menú</h2>
+            </div>
+            <ul class="menu-list" role="menubar">
+                <li role="none">
+                    <button class="menu-item" onclick="showCategory('inicio')" role="menuitem">
+                        <span class="icon">🏠</span>
+                        <span class="text">Inicio</span>
+                    </button>
+                </li>
+                <li role="none">
+                    <button class="menu-item" onclick="showCategory('refrescos')" role="menuitem">
+                        <span class="icon">🥤</span>
+                        <span class="text">Refrescos</span>
+                    </button>
+                </li>
+                <li role="none">
+                    <button class="menu-item" onclick="showCategory('snacks')" role="menuitem">
+                        <span class="icon">🍿</span>
+                        <span class="text">Snacks</span>
+                    </button>
+                </li>
+                <li role="none">
+                    <button class="menu-item" onclick="showCategory('dulces')" role="menuitem">
+                        <span class="icon">🍬</span>
+                        <span class="text">Dulces</span>
+                    </button>
+                </li>
+                <li role="none">
+                    <button class="menu-item" onclick="showCategory('contacto')" role="menuitem">
+                        <span class="icon">📞</span>
+                        <span class="text">Contacto</span>
+                    </button>
+                </li>
+                <li role="none">
+                    <button class="menu-item" onclick="showCategory('sobre')" role="menuitem">
+                        <span class="icon">ℹ️</span>
+                        <span class="text">Sobre Nosotros</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
 
+        <!-- Contenido principal -->
+        <main class="content" id="main">
+            <div class="page-header">
+                <h2 class="category-title" id="category-title">Bienvenido a Refresquería EL PORTON</h2>
+            </div>
+
+            <!-- Contenedor de productos -->
+            <section class="products-container" id="products-container" aria-labelledby="category-title">
+                <div class="welcome-message">
+                    <p>Selecciona una categoría para ver los productos o información.</p>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <div class="content">
-        <header class="page-header">
-            <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
-            <h1 class="category-title">Bienvenido a Refresquería Deliciosa</h1>
-            <div class="header-actions" style="display:flex;gap:8px;align-items:center">
-                    <div class="theme-toggle" style="display:flex;align-items:center">
-                        <div class="theme-switch">
-                            <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
-                            <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
-                        </div>
-                        <span id="theme-label" class="theme-label">Claro</span>
-                    </div>
-                <div class="cart-toggle">
-                    <button id="ver-carrito">🛒 Ver Carrito (<span id="cart-count">0</span>)</button>
+    <!-- Modal de datos de cliente -->
+    <div id="modal-datos" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <form id="form-datos" class="modal-form">
+                <h2 id="modal-title">Datos para el pedido</h2>
+                <div class="form-group">
+                    <label for="input-nombre" class="form-label">Nombre:</label>
+                    <input id="input-nombre" name="nombre" type="text" required class="form-input">
+                    <span id="error-nombre" class="error-message" aria-live="polite"></span>
                 </div>
-            </div>
-        </header>
-
-        <!-- Navegación por categorías desde el sidebar -->
-
-        <div class="products" id="products-container">
-            <p>Selecciona una categoría para ver los productos o información.</p>
+                <div class="form-group">
+                    <label for="input-correo" class="form-label">Correo electrónico:</label>
+                    <input id="input-correo" name="correo" type="email" required class="form-input">
+                    <span id="error-correo" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelar-datos" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" id="guardar-datos" class="btn btn-primary">Guardar pedido</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Panel de carrito -->
-            <!-- Modal de datos de cliente para pago -->
-            <div id="modal-datos" style="display:none;position:fixed;z-index:1000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;">
-                <form id="form-datos" style="background:var(--card-bg);padding:28px 22px 18px 22px;border-radius:12px;box-shadow:0 4px 18px var(--shadow);min-width:280px;max-width:90vw;display:flex;flex-direction:column;gap:14px;">
-                    <h2 style="margin:0 0 8px 0;font-size:1.2em;color:var(--accent)">Datos para el pedido</h2>
-                    <label>Nombre:
-                        <input id="input-nombre" name="nombre" type="text" required style="width:100%;padding:7px 8px;margin-top:3px;border-radius:6px;border:1px solid var(--border);">
-                    </label>
-                    <span id="error-nombre" style="color:#e74c3c;font-size:13px;display:none"></span>
-                    <label>Correo electrónico:
-                        <input id="input-correo" name="correo" type="email" required style="width:100%;padding:7px 8px;margin-top:3px;border-radius:6px;border:1px solid var(--border);">
-                    </label>
-                    <span id="error-correo" style="color:#e74c3c;font-size:13px;display:none"></span>
-                    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
-                        <button type="button" id="cancelar-datos" style="background:#ccc;color:#222;border:none;padding:7px 16px;border-radius:6px;">Cancelar</button>
-                        <button type="submit" id="guardar-datos" style="background:var(--accent);color:var(--accent-contrast);border:none;padding:7px 16px;border-radius:6px;">Guardar pedido</button>
-                    </div>
-                </form>
-            </div>
+    <!-- Panel de carrito mejorado -->
     <div id="cart-backdrop" class="cart-backdrop" aria-hidden="true"></div>
-    <aside id="cart-panel" class="cart-panel" aria-hidden="true">
+    <aside id="cart-panel" class="cart-panel" aria-labelledby="cart-title" aria-hidden="true">
         <div class="cart-header">
-            <h2>Tu Carrito</h2>
+            <h2 id="cart-title">Tu Carrito</h2>
             <button id="close-cart" class="close-cart" aria-label="Cerrar carrito">✖</button>
         </div>
-        <div id="cart-items"></div>
+        <div id="cart-items" class="cart-items" role="region" aria-live="polite"></div>
         <div class="cart-footer">
-            <p>Total: <strong id="cart-total">$0.00</strong></p>
-            <button id="vaciar-carrito">Vaciar carrito</button>
-            <button id="pagar-carrito">Pagar (simulado)</button>
+            <div class="cart-total">
+                <p>Total: <strong id="cart-total">$0.00</strong></p>
+            </div>
+            <div class="cart-actions">
+                <button id="vaciar-carrito" class="btn btn-secondary">Vaciar carrito</button>
+                <button id="pagar-carrito" class="btn btn-primary">Pagar (simulado)</button>
+            </div>
         </div>
     </aside>
-</div>
 
-<script>
-const products = {
-    refrescos: [
-        {name: "Cocacola", price: "$20.00", img: "Cocacola.jpeg"},
-        {name: "Sangria", price: "$20.00", img: "Sangria.jpeg"},
-        {name: "Sprite", price: "$20.00", img: "Sprite.jpeg"},
-    ],
-    snacks: [
-        {name: "Tostitos preparados", price: "$50.00", img: "Tostitos_prep.jpeg"},
-        {name: "Pepihuates", price: "$25.00", img: "Pepihuates.jpeg"},
-    ],
-    dulces: [
-        {name: "Chocolate", price: "$8.00", img: "Chocolate.jpeg"},
-        {name: "Gomitas", price: "$7.00", img: "Gomitas.jpeg"},
-    ],
-    contacto: [
-        {name: "Teléfono: 123-456-789", price: "", img: null},
-        {name: "Correo: info@refresqueria.com", price: "", img: null},
-    ],
-    sobre: [
-        {name: "Somos una refresquería familiar dedicada a ofrecer los mejores productos frescos y deliciosos.", price: "", img: null},
-    ]
-};
+    <!-- Scripts - MANTENIENDO FIREBASE COMPLETAMENTE -->
+    <script>
+    const products = {
+        refrescos: [
+            {name: "Cocacola", price: "$20.00", img: "Cocacola.jpeg"},
+            {name: "Sangria", price: "$20.00", img: "Sangria.jpeg"},
+            {name: "Sprite", price: "$20.00", img: "Sprite.jpeg"},
+        ],
+        snacks: [
+            {name: "Tostitos preparados", price: "$50.00", img: "Tostitos_prep.jpeg"},
+            {name: "Pepihuates", price: "$25.00", img: "Pepihuates.jpeg"},
+        ],
+        dulces: [
+            {name: "Chocolate", price: "$8.00", img: "Chocolate.jpeg"},
+            {name: "Gomitas", price: "$7.00", img: "Gomitas.jpeg"},
+        ],
+        contacto: [
+            {name: "Teléfono: 123-456-789", price: "", img: null},
+            {name: "Correo: info@refresqueria.com", price: "", img: null},
+        ],
+        sobre: [
+            {name: "Somos una refresquería familiar dedicada a ofrecer los mejores productos frescos y deliciosos.", price: "", img: null},
+        ]
+    };
 
-// Carrito en memoria y persistencia
-let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+    // Carrito en memoria y persistencia
+    let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
 
-function guardarCarrito() {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    actualizarContador();
-}
-
-function agregarAlCarrito(item) {
-    const existente = carrito.find(i => i.name === item.name);
-    if(existente) {
-        existente.qty += 1;
-    } else {
-        carrito.push({...item, qty: 1});
-    }
-    guardarCarrito();
-    actualizarPanelCarrito();
-}
-
-function quitarDelCarrito(name) {
-    carrito = carrito.filter(i => i.name !== name);
-    guardarCarrito();
-    actualizarPanelCarrito();
-}
-
-function cambiarCantidad(name, delta) {
-    const item = carrito.find(i => i.name === name);
-    if(!item) return;
-    item.qty += delta;
-    if(item.qty <= 0) quitarDelCarrito(name);
-    guardarCarrito();
-    actualizarPanelCarrito();
-}
-
-function actualizarContador() {
-    const count = carrito.reduce((s, i) => s + i.qty, 0);
-    const counterEl = document.getElementById('cart-count');
-    if(counterEl) counterEl.textContent = count;
-}
-
-function actualizarPanelCarrito() {
-    const container = document.getElementById('cart-items');
-    if(!container) return;
-    container.innerHTML = '';
-    let total = 0;
-    if(carrito.length === 0) {
-        container.innerHTML = '<p>El carrito está vacío.</p>';
-    } else {
-        carrito.forEach(i => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'cart-item';
-            const priceNum = parseFloat((i.price || '').replace(/[^0-9.-]+/g, '')) || 0;
-            total += priceNum * i.qty;
-            itemDiv.innerHTML = `
-                <div class="cart-item-info">
-                    <strong>${i.name}</strong>
-                    <p>${i.price} x ${i.qty}</p>
-                </div>
-                <div class="cart-item-actions">
-                    <button data-name="${i.name}" class="qty-minus">-</button>
-                    <button data-name="${i.name}" class="qty-plus">+</button>
-                    <button data-name="${i.name}" class="remove-item">Eliminar</button>
-                </div>
-            `;
-            container.appendChild(itemDiv);
-        });
-    }
-    const totalEl = document.getElementById('cart-total');
-    if(totalEl) totalEl.textContent = '$' + total.toFixed(2);
-    actualizarContador();
-}
-
-function showCategory(category) {
-    const container = document.getElementById("products-container");
-    if(!container) return;
-    container.innerHTML = "";
-    if(category === "contacto" || category === "sobre"){
-        container.classList.add("vertical");
-    } else {
-        container.classList.remove("vertical");
+    function guardarCarrito() {
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarContador();
     }
 
-    // Vista especial de inicio (bienvenida) - no agregar botones de carrito aquí
-    if(category === 'inicio'){
-        const welcome = document.createElement('div');
-        welcome.className = 'welcome';
-        welcome.innerHTML = `
-            <h2>Bienvenido a Refresquería EL PORTON</h2>
-            <p>Somos una refresquería familiar. Explora nuestras categorías desde la barra lateral y agrega tus productos favoritos al carrito.</p>
-            <p>Puedes ver nuestras promociones y novedades aquí.</p>
-        `;
-        container.appendChild(welcome);
-        const titleEl = document.querySelector(".category-title");
-        if(titleEl) titleEl.textContent = 'Inicio';
-        return;
+    function agregarAlCarrito(item) {
+        const existente = carrito.find(i => i.name === item.name);
+        if(existente) {
+            existente.qty += 1;
+        } else {
+            carrito.push({...item, qty: 1});
+        }
+        guardarCarrito();
+        actualizarPanelCarrito();
     }
 
-    if(products[category]) {
-        products[category].forEach(product => {
-            const card = document.createElement("div");
-            card.classList.add("product-card");
-
-            let imgHTML = "";
-            if(product.img) {
-                imgHTML = `<img src="${product.img}" alt="${product.name}" style="width:120px;height:120px;object-fit:contain;display:block;margin:0 auto 8px auto;">`;
-            }
-            card.innerHTML = `
-                ${imgHTML}
-                <h3>${product.name}</h3>
-                <p>${product.price}</p>
-            `;
-            // Si el producto tiene precio, agregamos botón para añadir al carrito
-            if(product.price) {
-                const btn = document.createElement('button');
-                btn.textContent = 'Agregar al carrito';
-                btn.addEventListener('click', () => agregarAlCarrito(product));
-                card.appendChild(btn);
-            }
-            container.appendChild(card);
-        });
-    } else {
-        container.innerHTML = "<p>No hay información disponible.</p>";
-    }
-    const titleEl = document.querySelector(".category-title");
-    if(titleEl) titleEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Mobile menu toggle
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    if(menuToggle && sidebar){
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-        // close when clicking outside on mobile
-        document.addEventListener('click', (e)=>{
-            if(window.innerWidth <= 800 && sidebar.classList.contains('open')){
-                if(!sidebar.contains(e.target) && e.target !== menuToggle){
-                    sidebar.classList.remove('open');
-                }
-            }
-        });
-    }
-    const verCarritoBtn = document.getElementById('ver-carrito');
-    if(verCarritoBtn) {
-        verCarritoBtn.addEventListener('click', () => {
-            const panel = document.getElementById('cart-panel');
-            const backdrop = document.getElementById('cart-backdrop');
-            if(panel) {
-                const open = panel.classList.toggle('open');
-                panel.setAttribute('aria-hidden', open ? 'false' : 'true');
-                if(backdrop) {
-                    if(open) { backdrop.classList.add('visible'); backdrop.setAttribute('aria-hidden','false'); }
-                    else { backdrop.classList.remove('visible'); backdrop.setAttribute('aria-hidden','true'); }
-                }
-            }
-            actualizarPanelCarrito();
-        });
+    function quitarDelCarrito(name) {
+        carrito = carrito.filter(i => i.name !== name);
+        guardarCarrito();
+        actualizarPanelCarrito();
     }
 
-    const vaciarBtn = document.getElementById('vaciar-carrito');
-    if(vaciarBtn) {
-        vaciarBtn.addEventListener('click', () => {
-            carrito = [];
-            guardarCarrito();
-            actualizarPanelCarrito();
-        });
+    function cambiarCantidad(name, delta) {
+        const item = carrito.find(i => i.name === name);
+        if(!item) return;
+        item.qty += delta;
+        if(item.qty <= 0) quitarDelCarrito(name);
+        guardarCarrito();
+        actualizarPanelCarrito();
     }
 
-    const pagarBtn = document.getElementById('pagar-carrito');
-    const modalDatos = document.getElementById('modal-datos');
-    const formDatos = document.getElementById('form-datos');
-    const inputNombre = document.getElementById('input-nombre');
-    const inputCorreo = document.getElementById('input-correo');
-    const errorNombre = document.getElementById('error-nombre');
-    const errorCorreo = document.getElementById('error-correo');
-    const cancelarDatos = document.getElementById('cancelar-datos');
-    if(pagarBtn && modalDatos && formDatos) {
-        pagarBtn.addEventListener('click', () => {
-            if(carrito.length === 0) { alert('El carrito está vacío.'); return; }
-            inputNombre.value = '';
-            inputCorreo.value = '';
-            errorNombre.style.display = 'none';
-            errorCorreo.style.display = 'none';
-            modalDatos.style.display = 'flex';
-            inputNombre.focus();
-        });
-        cancelarDatos.addEventListener('click', () => {
-            modalDatos.style.display = 'none';
-        });
-        formDatos.addEventListener('submit', function(e) {
-            e.preventDefault();
-            let nombre = inputNombre.value.trim();
-            let correo = inputCorreo.value.trim();
-            let valido = true;
-            if(!nombre) {
-                errorNombre.textContent = 'El nombre es obligatorio.';
-                errorNombre.style.display = 'block';
-                valido = false;
-            } else {
-                errorNombre.style.display = 'none';
-            }
-            if(!/^\S+@\S+\.\S+$/.test(correo)) {
-                errorCorreo.textContent = 'Correo electrónico no válido.';
-                errorCorreo.style.display = 'block';
-                valido = false;
-            } else {
-                errorCorreo.style.display = 'none';
-            }
-            if(!valido) return;
-            // Calcular total
-            let total = 0;
+    function actualizarContador() {
+        const count = carrito.reduce((s, i) => s + i.qty, 0);
+        const counterEl = document.getElementById('cart-count');
+        if(counterEl) counterEl.textContent = count;
+    }
+
+    function actualizarPanelCarrito() {
+        const container = document.getElementById('cart-items');
+        if(!container) return;
+        container.innerHTML = '';
+        let total = 0;
+        if(carrito.length === 0) {
+            container.innerHTML = '<p>El carrito está vacío.</p>';
+        } else {
             carrito.forEach(i => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
                 const priceNum = parseFloat((i.price || '').replace(/[^0-9.-]+/g, '')) || 0;
                 total += priceNum * i.qty;
+                itemDiv.innerHTML = `
+                    <div class="cart-item-info">
+                        <strong>${i.name}</strong>
+                        <p>${i.price} x ${i.qty}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <button data-name="${i.name}" class="qty-minus">-</button>
+                        <button data-name="${i.name}" class="qty-plus">+</button>
+                        <button data-name="${i.name}" class="remove-item">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
             });
+        }
+        const totalEl = document.getElementById('cart-total');
+        if(totalEl) totalEl.textContent = '$' + total.toFixed(2);
+        actualizarContador();
+    }
 
-            // Preparar objeto de productos
-            const productosParaGuardar = carrito.map(i => ({ name: i.name, qty: i.qty, price: i.price }));
+    function showCategory(category) {
+        const container = document.getElementById("products-container");
+        if(!container) return;
+        container.innerHTML = "";
+        
+        // Vista especial de inicio (bienvenida) - no agregar botones de carrito aquí
+        if(category === 'inicio'){
+            const welcome = document.createElement('div');
+            welcome.className = 'welcome';
+            welcome.innerHTML = `
+                <h2>Bienvenido a Refresquería EL PORTON</h2>
+                <p>Somos una refresquería familiar. Explora nuestras categorías desde la barra lateral y agrega tus productos favoritos al carrito.</p>
+                <p>Puedes ver nuestras promociones y novedades aquí.</p>
+            `;
+            container.appendChild(welcome);
+            const titleEl = document.querySelector(".category-title");
+            if(titleEl) titleEl.textContent = 'Inicio';
+            return;
+        }
 
-            // --- Guardar pedido EN FIRESTORE en lugar de localStorage ---
-            // Usa serverTimestamp para tener una marca de tiempo consistente en el servidor
-            db.collection("pedidos").add({
-                nombre: nombre,
-                correo: correo,
-                productos: productosParaGuardar,
-                total: total.toFixed(2),
-                fecha: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                alert('Pedido guardado en la nube para ' + nombre + '.');
+        if(products[category]) {
+            products[category].forEach(product => {
+                const card = document.createElement("div");
+                card.classList.add("product-card");
+
+                let imgHTML = "";
+                if(product.img) {
+                    imgHTML = `<img src="${product.img}" alt="${product.name}" loading="lazy">`;
+                }
+                card.innerHTML = `
+                    ${imgHTML}
+                    <h3>${product.name}</h3>
+                    <p>${product.price}</p>
+                `;
+                // Si el producto tiene precio, agregamos botón para añadir al carrito
+                if(product.price) {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Agregar al carrito';
+                    btn.addEventListener('click', () => agregarAlCarrito(product));
+                    card.appendChild(btn);
+                }
+                container.appendChild(card);
+            });
+        } else {
+            container.innerHTML = "<p>No hay información disponible.</p>";
+        }
+        const titleEl = document.querySelector(".category-title");
+        if(titleEl) titleEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        if(menuToggle && sidebar){
+            menuToggle.addEventListener('click', () => {
+                const isOpen = sidebar.classList.toggle('open');
+                menuToggle.setAttribute('aria-expanded', isOpen);
+            });
+            // close when clicking outside on mobile
+            document.addEventListener('click', (e)=>{
+                if(window.innerWidth <= 800 && sidebar.classList.contains('open')){
+                    if(!sidebar.contains(e.target) && e.target !== menuToggle){
+                        sidebar.classList.remove('open');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+        }
+        const verCarritoBtn = document.getElementById('ver-carrito');
+        if(verCarritoBtn) {
+            verCarritoBtn.addEventListener('click', () => {
+                const panel = document.getElementById('cart-panel');
+                const backdrop = document.getElementById('cart-backdrop');
+                if(panel) {
+                    const open = panel.classList.toggle('open');
+                    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+                    if(backdrop) {
+                        if(open) { backdrop.classList.add('visible'); backdrop.setAttribute('aria-hidden','false'); }
+                        else { backdrop.classList.remove('visible'); backdrop.setAttribute('aria-hidden','true'); }
+                    }
+                }
+                actualizarPanelCarrito();
+            });
+        }
+
+        const vaciarBtn = document.getElementById('vaciar-carrito');
+        if(vaciarBtn) {
+            vaciarBtn.addEventListener('click', () => {
                 carrito = [];
                 guardarCarrito();
                 actualizarPanelCarrito();
-                modalDatos.style.display = 'none';
-            })
-            .catch(err => {
-                console.error("Error guardando pedido en Firestore:", err);
-                alert('Error al guardar pedido. Intenta de nuevo.');
             });
-        });
-    }
-
-    // Delegación para botones dentro del panel del carrito
-    document.getElementById('cart-items')?.addEventListener('click', (e) => {
-        const target = e.target;
-        if(target.classList.contains('qty-minus')) {
-            cambiarCantidad(target.dataset.name, -1);
-        } else if(target.classList.contains('qty-plus')) {
-            cambiarCantidad(target.dataset.name, 1);
-        } else if(target.classList.contains('remove-item')) {
-            quitarDelCarrito(target.dataset.name);
         }
-    });
 
-    // Close button inside cart
-    const closeCartBtn = document.getElementById('close-cart');
-    const backdrop = document.getElementById('cart-backdrop');
-    if(closeCartBtn) closeCartBtn.addEventListener('click', () => {
-        const panel = document.getElementById('cart-panel');
-        if(panel) { panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); }
-        if(backdrop) { backdrop.classList.remove('visible'); backdrop.setAttribute('aria-hidden','true'); }
-    });
+        const pagarBtn = document.getElementById('pagar-carrito');
+        const modalDatos = document.getElementById('modal-datos');
+        const formDatos = document.getElementById('form-datos');
+        const inputNombre = document.getElementById('input-nombre');
+        const inputCorreo = document.getElementById('input-correo');
+        const errorNombre = document.getElementById('error-nombre');
+        const errorCorreo = document.getElementById('error-correo');
+        const cancelarDatos = document.getElementById('cancelar-datos');
+        if(pagarBtn && modalDatos && formDatos) {
+            pagarBtn.addEventListener('click', () => {
+                if(carrito.length === 0) { alert('El carrito está vacío.'); return; }
+                inputNombre.value = '';
+                inputCorreo.value = '';
+                errorNombre.style.display = 'none';
+                errorCorreo.style.display = 'none';
+                modalDatos.style.display = 'flex';
+                modalDatos.setAttribute('aria-hidden', 'false');
+                inputNombre.focus();
+            });
+            cancelarDatos.addEventListener('click', () => {
+                modalDatos.style.display = 'none';
+                modalDatos.setAttribute('aria-hidden', 'true');
+            });
+            formDatos.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let nombre = inputNombre.value.trim();
+                let correo = inputCorreo.value.trim();
+                let valido = true;
+                if(!nombre) {
+                    errorNombre.textContent = 'El nombre es obligatorio.';
+                    errorNombre.style.display = 'block';
+                    valido = false;
+                } else {
+                    errorNombre.style.display = 'none';
+                }
+                if(!/^\S+@\S+\.\S+$/.test(correo)) {
+                    errorCorreo.textContent = 'Correo electrónico no válido.';
+                    errorCorreo.style.display = 'block';
+                    valido = false;
+                } else {
+                    errorCorreo.style.display = 'none';
+                }
+                if(!valido) return;
+                // Calcular total
+                let total = 0;
+                carrito.forEach(i => {
+                    const priceNum = parseFloat((i.price || '').replace(/[^0-9.-]+/g, '')) || 0;
+                    total += priceNum * i.qty;
+                });
 
-    // Click on backdrop closes
-    if(backdrop) {
-        backdrop.addEventListener('click', () => {
+                // Preparar objeto de productos
+                const productosParaGuardar = carrito.map(i => ({ name: i.name, qty: i.qty, price: i.price }));
+
+                // --- Guardar pedido EN FIRESTORE ---
+                db.collection("pedidos").add({
+                    nombre: nombre,
+                    correo: correo,
+                    productos: productosParaGuardar,
+                    total: total.toFixed(2),
+                    fecha: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    alert('Pedido guardado en la nube para ' + nombre + '.');
+                    carrito = [];
+                    guardarCarrito();
+                    actualizarPanelCarrito();
+                    modalDatos.style.display = 'none';
+                    modalDatos.setAttribute('aria-hidden', 'true');
+                })
+                .catch(err => {
+                    console.error("Error guardando pedido en Firestore:", err);
+                    alert('Error al guardar pedido. Intenta de nuevo.');
+                });
+            });
+        }
+
+        // Delegación para botones dentro del panel del carrito
+        document.getElementById('cart-items')?.addEventListener('click', (e) => {
+            const target = e.target;
+            if(target.classList.contains('qty-minus')) {
+                cambiarCantidad(target.dataset.name, -1);
+            } else if(target.classList.contains('qty-plus')) {
+                cambiarCantidad(target.dataset.name, 1);
+            } else if(target.classList.contains('remove-item')) {
+                quitarDelCarrito(target.dataset.name);
+            }
+        });
+
+        // Close button inside cart
+        const closeCartBtn = document.getElementById('close-cart');
+        const backdrop = document.getElementById('cart-backdrop');
+        if(closeCartBtn) closeCartBtn.addEventListener('click', () => {
             const panel = document.getElementById('cart-panel');
             if(panel) { panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); }
-            backdrop.classList.remove('visible');
-            backdrop.setAttribute('aria-hidden','true');
+            if(backdrop) { backdrop.classList.remove('visible'); backdrop.setAttribute('aria-hidden','true'); }
         });
-    }
 
-    // Escape to close
-    document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape'){
-            const panel = document.getElementById('cart-panel');
-            if(panel && panel.classList.contains('open')){
-                panel.classList.remove('open');
-                panel.setAttribute('aria-hidden','true');
+        // Click on backdrop closes
+        if(backdrop) {
+            backdrop.addEventListener('click', () => {
+                const panel = document.getElementById('cart-panel');
+                if(panel) { panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); }
+                backdrop.classList.remove('visible');
+                backdrop.setAttribute('aria-hidden','true');
+            });
+        }
+
+        // Escape to close
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape'){
+                const panel = document.getElementById('cart-panel');
+                if(panel && panel.classList.contains('open')){
+                    panel.classList.remove('open');
+                    panel.setAttribute('aria-hidden','true');
+                }
+                const modal = document.getElementById('modal-datos');
+                if(modal && modal.style.display === 'flex'){
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
+                }
             }
-        }
+        });
+
+        // Inicializar vista de inicio por defecto
+        showCategory('inicio');
+        actualizarPanelCarrito();
     });
+    </script>
 
-    // Inicializar vista de inicio por defecto
-    showCategory('inicio');
-    actualizarPanelCarrito();
-});
-</script>
+    <!-- Theme toggle: persist preference and apply dark class, sincroniza texto del label -->
+    <script>
+    (function(){
+        const input = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+        const label = document.getElementById('theme-label');
+        if(!input || !label) return;
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-<!-- Theme toggle: persist preference and apply dark class, sincroniza texto del label -->
-<script>
-(function(){
-    const input = document.getElementById('theme-toggle');
-    const root = document.documentElement;
-    const label = document.getElementById('theme-label');
-    if(!input || !label) return;
-    const stored = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    function setLabel(theme) {
-        label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
-    }
-    const applyTheme = (theme)=>{
-        root.classList.remove('dark','light');
-        if(theme === 'dark'){
-            root.classList.add('dark');
-            input.checked = true;
+        function setLabel(theme) {
+            label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
         }
-        else if(theme === 'light'){
-            root.classList.add('light');
-            input.checked = false;
-        }
-        setLabel(theme);
-    };
+        const applyTheme = (theme)=>{
+            root.classList.remove('dark','light');
+            if(theme === 'dark'){
+                root.classList.add('dark');
+                input.checked = true;
+            }
+            else if(theme === 'light'){
+                root.classList.add('light');
+                input.checked = false;
+            }
+            setLabel(theme);
+        };
 
-    // Initialize: stored preference overrides system; otherwise follow system
-    if(stored === 'dark' || stored === 'light') applyTheme(stored);
-    else applyTheme(prefersDark ? 'dark' : 'light');
+        // Initialize: stored preference overrides system; otherwise follow system
+        if(stored === 'dark' || stored === 'light') applyTheme(stored);
+        else applyTheme(prefersDark ? 'dark' : 'light');
 
-    input.addEventListener('change', ()=>{
-        const newTheme = input.checked ? 'dark' : 'light';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
-})();
-</script>
+        input.addEventListener('change', ()=>{
+            const newTheme = input.checked ? 'dark' : 'light';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    })();
+    </script>
 
-<!-- Firebase scripts y configuración (agregadas al final) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script>
-  // Tu firebaseConfig (ya me la diste)
-  const firebaseConfig = {
-    apiKey: "AIzaSyAK2ex1uACVSPo_fxlgN_iDBAWlsBvV4RM",
-    authDomain: "refresqueriaporton.firebaseapp.com",
-    projectId: "refresqueriaporton",
-    storageBucket: "refresqueriaporton.firebasestorage.app",
-    messagingSenderId: "608366778564",
-    appId: "1:608366778564:web:39cf58eb7802c1e0189191",
-    measurementId: "G-LW73YBZVPF"
-  };
+    <!-- Firebase scripts y configuración (MANTENIDOS COMPLETAMENTE) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+      // Tu firebaseConfig (mantenida igual)
+      const firebaseConfig = {
+        apiKey: "AIzaSyAK2ex1uACVSPo_fxlgN_iDBAWlsBvV4RM",
+        authDomain: "refresqueriaporton.firebaseapp.com",
+        projectId: "refresqueriaporton",
+        storageBucket: "refresqueriaporton.firebasestorage.app",
+        messagingSenderId: "608366778564",
+        appId: "1:608366778564:web:39cf58eb7802c1e0189191",
+        measurementId: "G-LW73YBZVPF"
+      };
 
-  // Inicializar Firebase (si no está inicializado ya)
-  if(!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  // Referencia a Firestore
-  const db = firebase.firestore();
-</script>
+      // Inicializar Firebase (si no está inicializado ya)
+      if(!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      // Referencia a Firestore
+      const db = firebase.firestore();
+    </script>
 
 </body>
 </html>
