@@ -68,7 +68,7 @@ body {
     line-height: 1.5;
 }
 
-/* HEADER MÓVIL */
+/* HEADER MÓVIL - Solo visible en móviles */
 .mobile-header {
     position: fixed;
     top: 0;
@@ -1285,6 +1285,120 @@ body {
     background: var(--primary-dark);
 }
 
+/* ===== RESPONSIVE DESIGN CORREGIDO ===== */
+
+/* MÓVILES (hasta 767px) */
+@media (max-width: 767px) {
+    .mobile-header {
+        display: flex;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 60px;
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .sidebar.active ~ .cart-backdrop {
+        opacity: 1;
+        visibility: visible;
+        z-index: 998;
+    }
+    
+    .main-container {
+        margin-top: 60px;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cart-panel {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+/* TABLETS (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .mobile-header {
+        display: flex;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 60px;
+    }
+    
+    .sidebar.active {
+        left: 0;
+    }
+    
+    .main-container {
+        margin-top: 60px;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cart-panel {
+        width: 400px;
+        right: -400px;
+    }
+}
+
+/* ESCRITORIO (1024px en adelante) */
+@media (min-width: 1024px) {
+    .mobile-header {
+        display: none;
+    }
+    
+    .main-container {
+        margin-top: 0;
+        height: 100vh;
+    }
+    
+    .sidebar {
+        position: static;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100vh;
+    }
+    
+    .menu-toggle {
+        display: none;
+    }
+    
+    .content-area {
+        height: 100vh;
+        overflow-y: auto;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .cart-panel {
+        width: 400px;
+        right: -400px;
+    }
+}
+
 /* Mejoras responsive para el nuevo layout */
 @media (max-width: 768px) {
     .welcome {
@@ -1352,50 +1466,6 @@ body {
 
 .dark .product-card button:hover {
     background: var(--primary-dark);
-}
-
-/* RESPONSIVE */
-@media (max-width: 767px) {
-    .sidebar.active ~ .cart-backdrop {
-        opacity: 1;
-        visibility: visible;
-        z-index: 998;
-    }
-}
-
-@media (min-width: 768px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .cart-panel {
-        width: 400px;
-        right: -400px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .mobile-header {
-        display: none;
-    }
-    
-    .main-container {
-        margin-top: 0;
-    }
-    
-    .sidebar {
-        position: static;
-        width: 280px;
-        left: 0;
-    }
-    
-    .menu-toggle {
-        display: none;
-    }
-    
-    .products-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 @media (max-width: 480px) {
