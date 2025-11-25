@@ -27,26 +27,20 @@
         </div>
     </header>
 
-    <!-- Theme Toggle Desktop -->
-    <div class="theme-toggle-desktop">
-        <div class="theme-switch">
-            <input type="checkbox" id="theme-toggle-desktop" aria-label="Cambiar tema">
-            <label for="theme-toggle-desktop" class="theme-switch-label" title="Cambiar tema"></label>
-        </div>
-        <span id="theme-label-desktop" class="theme-label">Modo Oscuro</span>
-    </div>
-
-    <!-- Botón Carrito Desktop -->
-    <button id="ver-carrito-desktop" class="cart-btn-desktop" title="Ver carrito">
-        🛒 <span id="cart-count-desktop" class="cart-count">0</span>
-    </button>
-
     <!-- Contenido Principal -->
     <div class="main-container">
         <!-- Sidebar de Navegación -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Menú Principal</h2>
+                <!-- Theme Toggle Desktop en el sidebar -->
+                <div class="theme-toggle-desktop">
+                    <div class="theme-switch">
+                        <input type="checkbox" id="theme-toggle-desktop" aria-label="Cambiar tema">
+                        <label for="theme-toggle-desktop" class="theme-switch-label" title="Cambiar tema"></label>
+                    </div>
+                    <span id="theme-label-desktop" class="theme-label">Modo Oscuro</span>
+                </div>
             </div>
             <div class="menu-items">
                 <button class="menu-item active" onclick="showCategory('inicio')">
@@ -93,6 +87,11 @@
             </section>
         </main>
     </div>
+
+    <!-- Botón Carrito Desktop -->
+    <button id="ver-carrito-desktop" class="cart-btn-desktop" title="Ver carrito">
+        🛒 <span id="cart-count-desktop" class="cart-count">0</span>
+    </button>
 
     <!-- Modal de Completar Pedido -->
     <div id="modal-datos" class="modal-pedido">

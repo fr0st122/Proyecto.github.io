@@ -154,7 +154,7 @@ function actualizarPanelCarrito() {
     actualizarContadorCarrito();
 }
 
-// Sistema de Navegación ACTUALIZADO
+// Sistema de Navegación
 function showCategory(categoria) {
     const contenedor = document.getElementById('products-container');
     const tituloPagina = document.getElementById('page-title');
@@ -423,21 +423,22 @@ function inicializarTema() {
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     function setLabels(theme) {
-        const texto = theme === 'dark' ? 'Oscuro' : 'Claro';
-        labelMobile.textContent = texto;
-        labelDesktop.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+        const textoMobile = theme === 'dark' ? 'Oscuro' : 'Claro';
+        const textoDesktop = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
+        labelMobile.textContent = textoMobile;
+        labelDesktop.textContent = textoDesktop;
     }
 
     const applyTheme = (theme) => {
         root.classList.remove('dark','light');
         if (theme === 'dark') {
             root.classList.add('dark');
-            inputMobile.checked = true;
-            inputDesktop.checked = true;
+            if (inputMobile) inputMobile.checked = true;
+            if (inputDesktop) inputDesktop.checked = true;
         } else if (theme === 'light') {
             root.classList.add('light');
-            inputMobile.checked = false;
-            inputDesktop.checked = false;
+            if (inputMobile) inputMobile.checked = false;
+            if (inputDesktop) inputDesktop.checked = false;
         }
         setLabels(theme);
     };
@@ -446,21 +447,25 @@ function inicializarTema() {
     else applyTheme(prefersDark ? 'dark' : 'light');
 
     // Event listeners para ambos toggles
-    inputMobile.addEventListener('change', () => {
-        const newTheme = inputMobile.checked ? 'dark' : 'light';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        // Sincronizar el otro toggle
-        inputDesktop.checked = inputMobile.checked;
-    });
+    if (inputMobile) {
+        inputMobile.addEventListener('change', () => {
+            const newTheme = inputMobile.checked ? 'dark' : 'light';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            // Sincronizar el otro toggle
+            if (inputDesktop) inputDesktop.checked = inputMobile.checked;
+        });
+    }
 
-    inputDesktop.addEventListener('change', () => {
-        const newTheme = inputDesktop.checked ? 'dark' : 'light';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        // Sincronizar el otro toggle
-        inputMobile.checked = inputDesktop.checked;
-    });
+    if (inputDesktop) {
+        inputDesktop.addEventListener('change', () => {
+            const newTheme = inputDesktop.checked ? 'dark' : 'light';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            // Sincronizar el otro toggle
+            if (inputMobile) inputMobile.checked = inputDesktop.checked;
+        });
+    }
 }
 
 // Funciones para la página de pedidos
