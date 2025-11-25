@@ -92,8 +92,13 @@ function actualizarCantidad(nombreProducto, cambio) {
 function actualizarContadorCarrito() {
     const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
     const cartCount = document.getElementById('cart-count');
+    const cartCountDesktop = document.getElementById('cart-count-desktop');
+    
     if (cartCount) {
         cartCount.textContent = totalItems;
+    }
+    if (cartCountDesktop) {
+        cartCountDesktop.textContent = totalItems;
     }
 }
 
@@ -184,7 +189,7 @@ function showCategory(categoria) {
     }
     
     // Cerrar sidebar en móviles
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 1023) {
         const sidebar = document.getElementById('sidebar');
         if (sidebar) sidebar.classList.remove('active');
     }
@@ -404,38 +409,57 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     }, 4000);
 }
 
-// Sistema de Tema
+// Sistema de Tema MEJORADO
 function inicializarTema() {
-    const input = document.getElementById('theme-toggle');
+    const inputMobile = document.getElementById('theme-toggle-mobile');
+    const inputDesktop = document.getElementById('theme-toggle-desktop');
+    const labelMobile = document.getElementById('theme-label-mobile');
+    const labelDesktop = document.getElementById('theme-label-desktop');
     const root = document.documentElement;
-    const label = document.getElementById('theme-label');
-    if(!input || !label) return;
+    
+    if(!inputMobile || !inputDesktop || !labelMobile || !labelDesktop) return;
+    
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    function setLabel(theme) {
-        label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
+    function setLabels(theme) {
+        const texto = theme === 'dark' ? 'Oscuro' : 'Claro';
+        labelMobile.textContent = texto;
+        labelDesktop.textContent = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
     }
-    const applyTheme = (theme)=>{
+
+    const applyTheme = (theme) => {
         root.classList.remove('dark','light');
-        if(theme === 'dark'){
+        if (theme === 'dark') {
             root.classList.add('dark');
-            input.checked = true;
-        }
-        else if(theme === 'light'){
+            inputMobile.checked = true;
+            inputDesktop.checked = true;
+        } else if (theme === 'light') {
             root.classList.add('light');
-            input.checked = false;
+            inputMobile.checked = false;
+            inputDesktop.checked = false;
         }
-        setLabel(theme);
+        setLabels(theme);
     };
 
     if(stored === 'dark' || stored === 'light') applyTheme(stored);
     else applyTheme(prefersDark ? 'dark' : 'light');
 
-    input.addEventListener('change', ()=>{
-        const newTheme = input.checked ? 'dark' : 'light';
+    // Event listeners para ambos toggles
+    inputMobile.addEventListener('change', () => {
+        const newTheme = inputMobile.checked ? 'dark' : 'light';
         applyTheme(newTheme);
         localStorage.setItem('theme', newTheme);
+        // Sincronizar el otro toggle
+        inputDesktop.checked = inputMobile.checked;
+    });
+
+    inputDesktop.addEventListener('change', () => {
+        const newTheme = inputDesktop.checked ? 'dark' : 'light';
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        // Sincronizar el otro toggle
+        inputMobile.checked = inputDesktop.checked;
     });
 }
 
@@ -729,10 +753,20 @@ function inicializarApp() {
             });
         }
         
-        // Carrito toggle
+        // Carrito toggle mobile
         const verCarrito = document.getElementById('ver-carrito');
         if (verCarrito) {
             verCarrito.addEventListener('click', function() {
+                document.getElementById('cart-panel').classList.add('active');
+                document.getElementById('cart-backdrop').classList.add('active');
+                actualizarPanelCarrito();
+            });
+        }
+        
+        // Carrito toggle desktop
+        const verCarritoDesktop = document.getElementById('ver-carrito-desktop');
+        if (verCarritoDesktop) {
+            verCarritoDesktop.addEventListener('click', function() {
                 document.getElementById('cart-panel').classList.add('active');
                 document.getElementById('cart-backdrop').classList.add('active');
                 actualizarPanelCarrito();
@@ -815,10 +849,11 @@ function inicializarApp() {
             const sidebar = document.getElementById('sidebar');
             const menuToggle = document.getElementById('menu-toggle');
             
-            if (window.innerWidth <= 768 && 
+            if (window.innerWidth <= 1023 && 
                 sidebar && sidebar.classList.contains('active') &&
                 !sidebar.contains(e.target) && 
-                e.target !== menuToggle) {
+                e.target !== menuToggle &&
+                !e.target.closest('.menu-toggle')) {
                 sidebar.classList.remove('active');
             }
         });
