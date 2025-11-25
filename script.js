@@ -409,7 +409,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     }, 4000);
 }
 
-// Sistema de Tema MEJORADO
+/// Sistema de Tema CORREGIDO
 function inicializarTema() {
     const inputMobile = document.getElementById('theme-toggle-mobile');
     const inputDesktop = document.getElementById('theme-toggle-desktop');
@@ -417,7 +417,10 @@ function inicializarTema() {
     const labelDesktop = document.getElementById('theme-label-desktop');
     const root = document.documentElement;
     
-    if(!inputMobile || !inputDesktop || !labelMobile || !labelDesktop) return;
+    if(!inputMobile || !inputDesktop || !labelMobile || !labelDesktop) {
+        console.log('No se encontraron elementos del tema');
+        return;
+    }
     
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -425,17 +428,18 @@ function inicializarTema() {
     function setLabels(theme) {
         const textoMobile = theme === 'dark' ? 'Oscuro' : 'Claro';
         const textoDesktop = theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro';
-        labelMobile.textContent = textoMobile;
-        labelDesktop.textContent = textoDesktop;
+        if (labelMobile) labelMobile.textContent = textoMobile;
+        if (labelDesktop) labelDesktop.textContent = textoDesktop;
     }
 
     const applyTheme = (theme) => {
+        console.log('Aplicando tema:', theme);
         root.classList.remove('dark','light');
         if (theme === 'dark') {
             root.classList.add('dark');
             if (inputMobile) inputMobile.checked = true;
             if (inputDesktop) inputDesktop.checked = true;
-        } else if (theme === 'light') {
+        } else {
             root.classList.add('light');
             if (inputMobile) inputMobile.checked = false;
             if (inputDesktop) inputDesktop.checked = false;
@@ -443,13 +447,18 @@ function inicializarTema() {
         setLabels(theme);
     };
 
-    if(stored === 'dark' || stored === 'light') applyTheme(stored);
-    else applyTheme(prefersDark ? 'dark' : 'light');
+    // Aplicar tema guardado o detectado
+    if(stored === 'dark' || stored === 'light') {
+        applyTheme(stored);
+    } else {
+        applyTheme(prefersDark ? 'dark' : 'light');
+    }
 
     // Event listeners para ambos toggles
     if (inputMobile) {
         inputMobile.addEventListener('change', () => {
             const newTheme = inputMobile.checked ? 'dark' : 'light';
+            console.log('Toggle móvil cambiado a:', newTheme);
             applyTheme(newTheme);
             localStorage.setItem('theme', newTheme);
             // Sincronizar el otro toggle
@@ -460,6 +469,7 @@ function inicializarTema() {
     if (inputDesktop) {
         inputDesktop.addEventListener('change', () => {
             const newTheme = inputDesktop.checked ? 'dark' : 'light';
+            console.log('Toggle desktop cambiado a:', newTheme);
             applyTheme(newTheme);
             localStorage.setItem('theme', newTheme);
             // Sincronizar el otro toggle
