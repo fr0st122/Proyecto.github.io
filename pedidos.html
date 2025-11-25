@@ -165,11 +165,6 @@
       color: var(--estado-entregado);
     }
 
-    .filtro-btn[data-filtro="cancelados"]:not(.active):hover {
-      border-color: var(--estado-cancelado);
-      color: var(--estado-cancelado);
-    }
-
     /* Grid de pedidos */
     .pedidos-grid {
       display: grid;
@@ -581,10 +576,6 @@
         <div class="estadistica-numero" id="pedidos-entregados">0</div>
         <div class="estadistica-texto">Entregados</div>
       </div>
-      <div class="estadistica-card">
-        <div class="estadistica-numero" id="pedidos-cancelados">0</div>
-        <div class="estadistica-texto">Cancelados</div>
-      </div>
     </div>
 
     <!-- Filtros -->
@@ -657,23 +648,17 @@
       const pendientes = todosLosPedidos.filter(p => p.estado === 'pendiente').length;
       const proceso = todosLosPedidos.filter(p => p.estado === 'proceso').length;
       const entregados = todosLosPedidos.filter(p => p.estado === 'entregado').length;
-      const cancelados = todosLosPedidos.filter(p => p.estado === 'cancelado').length;
 
       document.getElementById('total-pedidos').textContent = total;
       document.getElementById('pedidos-pendientes').textContent = pendientes;
       document.getElementById('pedidos-proceso').textContent = proceso;
       document.getElementById('pedidos-entregados').textContent = entregados;
-      document.getElementById('pedidos-cancelados').textContent = cancelados;
     }
 
     function aplicarFiltro() {
-      let pedidosFiltrados;
-      
-      if (filtroActual === 'todos') {
-        pedidosFiltrados = todosLosPedidos;
-      } else {
-        pedidosFiltrados = todosLosPedidos.filter(pedido => pedido.estado === filtroActual);
-      }
+      const pedidosFiltrados = filtroActual === 'todos' 
+        ? todosLosPedidos 
+        : todosLosPedidos.filter(pedido => pedido.estado === filtroActual);
       
       renderPedidos(pedidosFiltrados);
       actualizarEstadisticas();
@@ -783,19 +768,13 @@
           if (boton) {
             boton.addEventListener('click', () => {
               if(confirm(confirmMsg)) {
-                // Actualizar estado en Firebase
-                db.collection('pedidos').doc(pedido.id).update({
-                  estado: nuevoEstado,
-                  fechaActualizacion: firebase.firestore.FieldValue.serverTimestamp()
-                })
-                .then(() => {
-                  // Actualizar estado localmente
-                  pedido.estado = nuevoEstado;
-                  aplicarFiltro();
-                  
-                  if (nuevoEstado === 'entregado') {
-                    // Notificación por email
-                    const cuerpo = encodeURIComponent(`Hola ${pedido.nombre},
+                // En una implementación real, aquí actualizarías Firebase
+                pedido.estado = nuevoEstado;
+                aplicarFiltro();
+                
+                if (nuevoEstado === 'entregado') {
+                  // Notificación por email
+                  const cuerpo = encodeURIComponent(`Hola ${pedido.nombre},
 
 Tu pedido ha sido marcado como ENTREGADO.
 
@@ -808,13 +787,8 @@ ${ (pedido.productos || []).map(prod => `• ${prod.cantidad || prod.qty || 1} x
 
 Atentamente,
 El equipo de EL PORTON`);
-                    window.open(`mailto:${pedido.correo}?subject=¡Tu pedido ha sido entregado!&body=${cuerpo}`);
-                  }
-                })
-                .catch(err => {
-                  console.error('Error actualizando estado:', err);
-                  alert('Error al actualizar el estado del pedido');
-                });
+                  window.open(`mailto:${pedido.correo}?subject=¡Tu pedido ha sido entregado!&body=${cuerpo}`);
+                }
               }
             });
           }
