@@ -51,6 +51,7 @@ let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 function guardarCarrito() {
     localStorage.setItem('carrito', JSON.stringify(carrito));
     actualizarContadorCarrito();
+    actualizarContadorEscritorio();
 }
 
 function agregarAlCarrito(producto) {
@@ -99,6 +100,24 @@ function actualizarContadorCarrito() {
     }
     if (cartCountDesktop) {
         cartCountDesktop.textContent = totalItems;
+    }
+}
+
+// ===== NUEVO CONTADOR PARA ESCRITORIO =====
+function actualizarContadorEscritorio() {
+    const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+    const contadorEscritorio = document.getElementById('contador-escritorio');
+    
+    if (contadorEscritorio) {
+        contadorEscritorio.textContent = totalItems;
+        
+        // Animación cuando hay productos
+        if (totalItems > 0) {
+            contadorEscritorio.style.animation = 'bounce 0.5s ease';
+            setTimeout(() => {
+                contadorEscritorio.style.animation = '';
+            }, 500);
+        }
     }
 }
 
@@ -152,6 +171,7 @@ function actualizarPanelCarrito() {
 
     totalElemento.textContent = `$${total.toFixed(2)}`;
     actualizarContadorCarrito();
+    actualizarContadorEscritorio();
 }
 
 // FUNCIONES PARA ABRIR Y CERRAR EL CARRITO
@@ -179,6 +199,50 @@ function cerrarCarrito() {
         cartPanel.classList.remove('active');
         cartBackdrop.classList.remove('active');
         console.log('Carrito cerrado correctamente');
+    }
+}
+
+// ===== NUEVO BOTÓN CARRITO ESCRITORIO =====
+function inicializarCarritoEscritorio() {
+    const botonEscritorio = document.getElementById('carrito-escritorio');
+    
+    if (botonEscritorio) {
+        console.log('🖥️ Inicializando nuevo botón carrito escritorio...');
+        
+        // Agregar event listener
+        botonEscritorio.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Nuevo botón desktop clickeado');
+            abrirCarrito();
+        });
+        
+        // Forzar estilos
+        botonEscritorio.style.display = 'flex';
+        botonEscritorio.style.visibility = 'visible';
+        botonEscritorio.style.opacity = '1';
+        botonEscritorio.style.position = 'fixed';
+        botonEscritorio.style.top = '20px';
+        botonEscritorio.style.right = '20px';
+        botonEscritorio.style.zIndex = '1001';
+        
+        console.log('✅ Nuevo botón carrito escritorio configurado');
+    } else {
+        console.error('❌ No se encontró el nuevo botón carrito escritorio');
+    }
+}
+
+function configurarCarritos() {
+    console.log('🔧 Configurando todos los carritos...');
+    
+    // Configurar el nuevo botón de escritorio
+    inicializarCarritoEscritorio();
+    
+    // Ocultar el botón viejo por si acaso
+    const botonViejo = document.getElementById('ver-carrito-desktop');
+    if (botonViejo) {
+        botonViejo.style.display = 'none';
+        botonViejo.style.visibility = 'hidden';
     }
 }
 
@@ -748,40 +812,6 @@ function inicializarPedidos() {
     });
 }
 
-// SOLUCIÓN ESPECÍFICA PARA EL CARRITO DESKTOP
-function forzarCarritoDesktop() {
-    const botonDesktop = document.getElementById('ver-carrito-desktop');
-    
-    if (botonDesktop) {
-        console.log('🔧 Configurando carrito desktop...');
-        
-        // Forzar visibilidad
-        botonDesktop.style.display = 'flex';
-        botonDesktop.style.visibility = 'visible';
-        botonDesktop.style.opacity = '1';
-        botonDesktop.style.position = 'fixed';
-        botonDesktop.style.top = '20px';
-        botonDesktop.style.right = '20px';
-        botonDesktop.style.zIndex = '1001';
-        
-        // Remover cualquier event listener existente
-        const nuevoBoton = botonDesktop.cloneNode(true);
-        botonDesktop.parentNode.replaceChild(nuevoBoton, botonDesktop);
-        
-        // Agregar nuevo event listener
-        nuevoBoton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('🖱️ Botón desktop clickeado');
-            abrirCarrito();
-        });
-        
-        console.log('✅ Carrito desktop configurado correctamente');
-    } else {
-        console.error('❌ No se encontró el botón del carrito desktop');
-    }
-}
-
 // Inicialización general
 function inicializarApp() {
     console.log('🚀 Inicializando aplicación...');
@@ -791,9 +821,10 @@ function inicializarApp() {
     
     // Inicializar carrito
     actualizarContadorCarrito();
+    actualizarContadorEscritorio();
     
-    // SOLUCIÓN PARA CARRITO DESKTOP - EJECUTAR INMEDIATAMENTE
-    forzarCarritoDesktop();
+    // CONFIGURAR TODOS LOS CARRITOS
+    configurarCarritos();
     
     // Verificar si estamos en la página principal
     const productsContainer = document.getElementById('products-container');
@@ -913,17 +944,35 @@ function inicializarApp() {
     console.log('🎉 Aplicación inicializada correctamente');
 }
 
+// Agregar animación CSS para el contador
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes bounce {
+        0%, 20%, 60%, 100% {
+            transform: scale(1);
+        }
+        40% {
+            transform: scale(1.2);
+        }
+        80% {
+            transform: scale(1.1);
+        }
+    }
+`;
+document.head.appendChild(style);
+
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', inicializarApp);
 
-// Ejecutar solución para carrito desktop después de que cargue la página
+// Ejecutar después de que cargue la página
 window.addEventListener('load', function() {
     console.log('📄 Página completamente cargada');
     actualizarContadorCarrito();
+    actualizarContadorEscritorio();
     
-    // Ejecutar solución para carrito desktop nuevamente por si acaso
-    setTimeout(forzarCarritoDesktop, 500);
+    // Reforzar configuración del carrito escritorio
+    setTimeout(configurarCarritos, 500);
 });
 
-// Ejecutar una vez más después de un tiempo por si hay problemas de timing
-setTimeout(forzarCarritoDesktop, 1000);
+// Ejecutar una vez más después de un tiempo
+setTimeout(configurarCarritos, 1000);
