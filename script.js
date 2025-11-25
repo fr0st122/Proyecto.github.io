@@ -15,7 +15,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// Configuración de productos ACTUALIZADA - CON NOMBRES CORRECTOS JPEG:
+// Configuración de productos
 const products = {
     refrescos: [
         {name: "Cocacola", price: "$20.00", img: "imagenes/Cocacola.jpeg", category: "Bebidas"},
@@ -134,11 +134,11 @@ function actualizarPanelCarrito() {
                 </div>
                 <div class="cart-item-controls">
                     <div class="quantity-controls">
-                        <button class="qty-btn" onclick="actualizarCantidad('${item.name}', -1)">−</button>
+                        <button type="button" class="qty-btn" onclick="actualizarCantidad('${item.name}', -1)">−</button>
                         <span class="quantity">${item.cantidad}</span>
-                        <button class="qty-btn" onclick="actualizarCantidad('${item.name}', 1)">+</button>
+                        <button type="button" class="qty-btn" onclick="actualizarCantidad('${item.name}', 1)">+</button>
                     </div>
-                    <button class="remove-btn" onclick="quitarDelCarrito('${item.name}')">
+                    <button type="button" class="remove-btn" onclick="quitarDelCarrito('${item.name}')">
                         🗑️
                     </button>
                 </div>
@@ -154,6 +154,34 @@ function actualizarPanelCarrito() {
     actualizarContadorCarrito();
 }
 
+// FUNCIONES PARA ABRIR Y CERRAR EL CARRITO - CORREGIDAS
+function abrirCarrito() {
+    console.log('Abriendo carrito...');
+    const cartPanel = document.getElementById('cart-panel');
+    const cartBackdrop = document.getElementById('cart-backdrop');
+    
+    if (cartPanel && cartBackdrop) {
+        cartPanel.classList.add('active');
+        cartBackdrop.classList.add('active');
+        actualizarPanelCarrito();
+        console.log('Carrito abierto correctamente');
+    } else {
+        console.error('No se encontraron elementos del carrito');
+    }
+}
+
+function cerrarCarrito() {
+    console.log('Cerrando carrito...');
+    const cartPanel = document.getElementById('cart-panel');
+    const cartBackdrop = document.getElementById('cart-backdrop');
+    
+    if (cartPanel && cartBackdrop) {
+        cartPanel.classList.remove('active');
+        cartBackdrop.classList.remove('active');
+        console.log('Carrito cerrado correctamente');
+    }
+}
+
 // Sistema de Navegación
 function showCategory(categoria) {
     const contenedor = document.getElementById('products-container');
@@ -162,10 +190,13 @@ function showCategory(categoria) {
     if (!contenedor || !tituloPagina) return;
     
     // Actualizar menú activo
-    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('active');
-    }
+    document.querySelectorAll('.menu-item').forEach(item => {
+        if (item.onclick && item.onclick.toString().includes(categoria)) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
     
     contenedor.innerHTML = '';
     
@@ -240,6 +271,7 @@ function mostrarProductos(contenedor, productos) {
             const boton = document.createElement('button');
             boton.className = 'add-to-cart-btn';
             boton.textContent = 'Agregar al Carrito';
+            boton.type = 'button';
             boton.addEventListener('click', () => agregarAlCarrito(producto));
             tarjeta.querySelector('.product-info').appendChild(boton);
         }
@@ -376,23 +408,6 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     notificacion.className = `notification ${tipo}`;
     notificacion.textContent = mensaje;
     
-    // Estilos para la notificación
-    notificacion.style.cssText = `
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background: ${tipo === 'error' ? '#dc3545' : 'var(--primary)'};
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        box-shadow: var(--shadow);
-        z-index: 5000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        font-weight: 500;
-        max-width: 300px;
-    `;
-    
     document.body.appendChild(notificacion);
     
     setTimeout(() => {
@@ -409,7 +424,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     }, 4000);
 }
 
-// Sistema de Tema CORREGIDO
+// Sistema de Tema
 function inicializarTema() {
     const inputMobile = document.getElementById('theme-toggle-mobile');
     const inputDesktop = document.getElementById('theme-toggle-desktop');
@@ -604,21 +619,21 @@ function renderPedidos(pedidos) {
                 <div class="pedido-total">💰 Total: $${pedido.total}</div>
                 <div class="pedido-acciones">
                     ${pedido.estado === 'pendiente' ? `
-                        <button class="btn btn-proceso" data-id="${pedido.id}">
+                        <button type="button" class="btn btn-proceso" data-id="${pedido.id}">
                             ⚡ En Proceso
                         </button>
                     ` : ''}
                     ${pedido.estado === 'proceso' ? `
-                        <button class="btn btn-entregado" data-id="${pedido.id}">
+                        <button type="button" class="btn btn-entregado" data-id="${pedido.id}">
                             ✅ Entregado
                         </button>
                     ` : ''}
                     ${pedido.estado !== 'cancelado' && pedido.estado !== 'entregado' ? `
-                        <button class="btn btn-cancelar" data-id="${pedido.id}">
+                        <button type="button" class="btn btn-cancelar" data-id="${pedido.id}">
                             ❌ Cancelar
                         </button>
                     ` : ''}
-                    <button class="btn btn-eliminar" data-id="${pedido.id}">
+                    <button type="button" class="btn btn-eliminar" data-id="${pedido.id}">
                         🗑️ Eliminar
                     </button>
                 </div>
@@ -637,23 +652,6 @@ function renderPedidos(pedidos) {
                         })
                         .then(() => {
                             mostrarNotificacion(`Pedido ${nuevoEstado} correctamente`);
-                            if (nuevoEstado === 'entregado') {
-                                // Notificación por email
-                                const cuerpo = encodeURIComponent(`Hola ${pedido.nombre},
-
-Tu pedido ha sido marcado como ENTREGADO.
-
-📦 Resumen del pedido:
-${ (pedido.productos || []).map(prod => `• ${prod.cantidad || prod.qty || 1} x ${prod.name} (${prod.price})`).join('\n') }
-
-💰 Total: $${pedido.total}
-
-¡Gracias por confiar en Refresquería EL PORTON!
-
-Atentamente,
-El equipo de EL PORTON`);
-                                window.open(`mailto:${pedido.correo}?subject=¡Tu pedido ha sido entregado!&body=${cuerpo}`);
-                            }
                         })
                         .catch(err => {
                             console.error('Error actualizando pedido:', err);
@@ -714,7 +712,7 @@ function cargarPedidos() {
                 todosLosPedidos.push({
                     id: doc.id,
                     ...data,
-                    estado: data.estado || 'pendiente' // Estado por defecto
+                    estado: data.estado || 'pendiente'
                 });
             });
 
@@ -746,91 +744,58 @@ function inicializarPedidos() {
     });
 }
 
-// Función para ajustar el grid según el tamaño de pantalla
-function ajustarGridResponsivo() {
-    const ancho = window.innerWidth;
-    const contenedor = document.getElementById('products-container');
-    
-    if (!contenedor) return;
-    
-    const grid = contenedor.querySelector('.products-grid');
-    if (!grid) return;
-    
-    if (ancho >= 1200) {
-        grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
-    } else if (ancho >= 1024) {
-        grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
-    } else if (ancho >= 768) {
-        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
-    } else {
-        grid.style.gridTemplateColumns = '1fr';
-    }
-}
-
-// Inicialización general
+// Inicialización general - CORREGIDA
 function inicializarApp() {
+    console.log('Inicializando aplicación...');
+    
     // Inicializar tema
     inicializarTema();
     
     // Inicializar carrito
     actualizarContadorCarrito();
     
-    // Inicializar grid responsivo
-    ajustarGridResponsivo();
-    window.addEventListener('resize', ajustarGridResponsivo);
-    
     // Verificar si estamos en la página principal
     const productsContainer = document.getElementById('products-container');
     if (productsContainer) {
+        console.log('Inicializando página principal...');
+        
         // Inicializar vista de inicio
         showCategory('inicio');
         
-        // Menu toggle para móviles
-        const menuToggle = document.getElementById('menu-toggle');
-        if (menuToggle) {
-            menuToggle.addEventListener('click', function() {
-                document.getElementById('sidebar').classList.toggle('active');
-            });
-        }
-        
-        // Carrito toggle mobile
+        // CONFIGURACIÓN DEL CARRITO - CORREGIDA
         const verCarrito = document.getElementById('ver-carrito');
+        const verCarritoDesktop = document.getElementById('ver-carrito-desktop');
+        const closeCart = document.getElementById('close-cart');
+        const cartBackdrop = document.getElementById('cart-backdrop');
+        const pagarCarrito = document.getElementById('pagar-carrito');
+        const vaciarCarrito = document.getElementById('vaciar-carrito');
+        
+        // Botón carrito móvil
         if (verCarrito) {
-            verCarrito.addEventListener('click', function() {
-                document.getElementById('cart-panel').classList.add('active');
-                document.getElementById('cart-backdrop').classList.add('active');
-                actualizarPanelCarrito();
-            });
+            verCarrito.addEventListener('click', abrirCarrito);
+            console.log('Botón carrito móvil configurado');
+        } else {
+            console.error('No se encontró el botón del carrito móvil');
         }
         
-        // Carrito toggle desktop
-        const verCarritoDesktop = document.getElementById('ver-carrito-desktop');
+        // Botón carrito desktop
         if (verCarritoDesktop) {
-            verCarritoDesktop.addEventListener('click', function() {
-                document.getElementById('cart-panel').classList.add('active');
-                document.getElementById('cart-backdrop').classList.add('active');
-                actualizarPanelCarrito();
-            });
+            verCarritoDesktop.addEventListener('click', abrirCarrito);
+            console.log('Botón carrito desktop configurado');
+        } else {
+            console.error('No se encontró el botón del carrito desktop');
         }
         
         // Cerrar carrito
-        const closeCart = document.getElementById('close-cart');
         if (closeCart) {
             closeCart.addEventListener('click', cerrarCarrito);
         }
         
-        const cartBackdrop = document.getElementById('cart-backdrop');
         if (cartBackdrop) {
             cartBackdrop.addEventListener('click', cerrarCarrito);
         }
         
-        function cerrarCarrito() {
-            document.getElementById('cart-panel').classList.remove('active');
-            document.getElementById('cart-backdrop').classList.remove('active');
-        }
-        
         // Vaciar carrito
-        const vaciarCarrito = document.getElementById('vaciar-carrito');
         if (vaciarCarrito) {
             vaciarCarrito.addEventListener('click', function() {
                 if (carrito.length > 0) {
@@ -845,24 +810,32 @@ function inicializarApp() {
         }
         
         // Procesar pago
-        const pagarCarrito = document.getElementById('pagar-carrito');
         if (pagarCarrito) {
             pagarCarrito.addEventListener('click', mostrarModalPedido);
         }
         
+        // Menu toggle para móviles
+        const menuToggle = document.getElementById('menu-toggle');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+        }
+        
         // Modal de datos
         const cancelarDatos = document.getElementById('cancelar-datos');
+        const cancelarPedido = document.getElementById('cancelar-pedido');
+        const modalDatos = document.getElementById('modal-datos');
+        const formDatos = document.getElementById('form-datos');
+        
         if (cancelarDatos) {
             cancelarDatos.addEventListener('click', cerrarModalPedido);
         }
         
-        const cancelarPedido = document.getElementById('cancelar-pedido');
         if (cancelarPedido) {
             cancelarPedido.addEventListener('click', cerrarModalPedido);
         }
         
-        // Cerrar modal al hacer clic fuera
-        const modalDatos = document.getElementById('modal-datos');
         if (modalDatos) {
             modalDatos.addEventListener('click', function(e) {
                 if (e.target === this) {
@@ -879,7 +852,6 @@ function inicializarApp() {
         });
         
         // Enviar formulario
-        const formDatos = document.getElementById('form-datos');
         if (formDatos) {
             formDatos.addEventListener('submit', procesarPedido);
         }
@@ -897,14 +869,25 @@ function inicializarApp() {
                 sidebar.classList.remove('active');
             }
         });
+        
+        console.log('Página principal inicializada correctamente');
     }
     
     // Verificar si estamos en la página de pedidos
     const pedidosContainer = document.getElementById('pedidos-container');
     if (pedidosContainer) {
+        console.log('Inicializando página de pedidos...');
         inicializarPedidos();
     }
+    
+    console.log('Aplicación inicializada correctamente');
 }
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', inicializarApp);
+
+// También inicializar cuando la ventana se carga completamente
+window.addEventListener('load', function() {
+    console.log('Página completamente cargada');
+    actualizarContadorCarrito();
+});
