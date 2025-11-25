@@ -7,26 +7,23 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Principal -->
-    <header class="main-header">
-        <div class="header-container">
+    <!-- Header Móvil -->
+    <header class="mobile-header">
+        <div class="header-left">
             <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
-            <div class="logo-section">
-                <h1 class="site-title">EL PORTON</h1>
-                <span class="site-subtitle">Refresquería Familiar</span>
-            </div>
-            <div class="header-actions">
-                <div class="theme-toggle">
-                    <div class="theme-switch">
-                        <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
-                        <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
-                    </div>
-                    <span id="theme-label" class="theme-label">Claro</span>
+            <h1 class="site-title">EL PORTON</h1>
+        </div>
+        <div class="header-right">
+            <div class="theme-toggle">
+                <div class="theme-switch">
+                    <input type="checkbox" id="theme-toggle" aria-label="Cambiar tema">
+                    <label for="theme-toggle" class="theme-switch-label" title="Cambiar tema"></label>
                 </div>
-                <button id="ver-carrito" class="cart-btn">
-                    🛒 Carrito <span id="cart-count" class="cart-count">0</span>
-                </button>
+                <span id="theme-label" class="theme-label">Claro</span>
             </div>
+            <button id="ver-carrito" class="cart-btn-mobile">
+                🛒 <span id="cart-count" class="cart-count">0</span>
+            </button>
         </div>
     </header>
 
@@ -79,28 +76,52 @@
         </main>
     </div>
 
-    <!-- Modal de Datos del Cliente -->
-    <div id="modal-datos" class="modal">
-        <div class="modal-overlay" id="modal-overlay"></div>
-        <div class="modal-content">
-            <div class="modal-header">
+    <!-- Modal de Completar Pedido -->
+    <div id="modal-datos" class="modal-pedido">
+        <div class="modal-pedido-content">
+            <div class="modal-pedido-header">
                 <h3>Completar Pedido</h3>
-                <button class="modal-close" id="cancelar-datos">×</button>
+                <button type="button" id="cancelar-datos" class="modal-pedido-close">
+                    ×
+                </button>
             </div>
-            <form id="form-datos" class="modal-form">
-                <div class="form-group">
-                    <label for="input-nombre" class="form-label">Nombre completo *</label>
-                    <input type="text" id="input-nombre" name="nombre" class="form-input" required placeholder="Ingresa tu nombre">
-                    <span id="error-nombre" class="error-message"></span>
+            
+            <form id="form-datos" class="modal-pedido-form">
+                <div class="form-group-pedido">
+                    <label for="input-nombre" class="form-label-pedido">
+                        Nombre completo *
+                    </label>
+                    <input 
+                        type="text" 
+                        id="input-nombre" 
+                        name="nombre" 
+                        class="form-input-pedido" 
+                        required 
+                        placeholder="Ingresa tu nombre completo"
+                    >
+                    <span id="error-nombre" class="error-message-pedido"></span>
                 </div>
-                <div class="form-group">
-                    <label for="input-correo" class="form-label">Correo electrónico *</label>
-                    <input type="email" id="input-correo" name="correo" class="form-input" required placeholder="tu@email.com">
-                    <span id="error-correo" class="error-message"></span>
+                
+                <div class="form-group-pedido">
+                    <label for="input-correo" class="form-label-pedido">
+                        Correo electrónico *
+                    </label>
+                    <input 
+                        type="email" 
+                        id="input-correo" 
+                        name="correo" 
+                        class="form-input-pedido" 
+                        required 
+                        placeholder="ejemplo@correo.com"
+                    >
+                    <span id="error-correo" class="error-message-pedido"></span>
                 </div>
-                <div class="form-actions">
-                    <button type="button" id="cancelar-pedido" class="btn btn-secondary">Cancelar</button>
-                    <button type="submit" id="guardar-datos" class="btn btn-primary">
+                
+                <div class="modal-pedido-actions">
+                    <button type="button" id="cancelar-pedido" class="btn btn-cancelar-pedido">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="guardar-datos" class="btn btn-confirmar-pedido">
                         Confirmar Pedido
                     </button>
                 </div>
@@ -132,348 +153,281 @@
         </div>
     </aside>
 
-    <!-- Scripts -->
+    <!-- JavaScript -->
     <script>
-    // Configuración de productos
-    const products = {
-        refrescos: [
-            {name: "Coca Cola", price: "$20.00", img: "Cocacola.jpeg", category: "Bebidas"},
-            {name: "Sangría", price: "$20.00", img: "Sangria.jpeg", category: "Bebidas"},
-            {name: "Sprite", price: "$20.00", img: "Sprite.jpeg", category: "Bebidas"},
-        ],
-        snacks: [
-            {name: "Tostitos Preparados", price: "$50.00", img: "Tostitos_prep.jpeg", category: "Snacks"},
-            {name: "Pepihuates", price: "$25.00", img: "Pepihuates.jpeg", category: "Snacks"},
-        ],
-        dulces: [
-            {name: "Chocolate", price: "$8.00", img: "Chocolate.jpeg", category: "Dulces"},
-            {name: "Gomitas", price: "$7.00", img: "Gomitas.jpeg", category: "Dulces"},
-        ],
-        contacto: [
-            {name: "Teléfono: 123-456-789", price: "", img: null, type: "contacto"},
-            {name: "Correo: info@refresqueria.com", price: "", img: null, type: "contacto"},
-            {name: "Dirección: Av. Principal #123", price: "", img: null, type: "contacto"},
-        ],
-        sobre: [
-            {name: "Somos una refresquería familiar dedicada a ofrecer los mejores productos frescos y deliciosos.", price: "", img: null, type: "info"},
-            {name: "Horario: Lunes a Domingo 8:00 AM - 10:00 PM", price: "", img: null, type: "info"},
-            {name: "¡Visítanos y descubre por qué somos los favoritos del barrio!", price: "", img: null, type: "info"},
-        ]
-    };
+        // Configuración de productos
+        const products = {
+            refrescos: [
+                {name: "Coca Cola", price: "$20.00", img: "Cocacola.jpeg", category: "Bebidas"},
+                {name: "Sangría", price: "$20.00", img: "Sangria.jpeg", category: "Bebidas"},
+                {name: "Sprite", price: "$20.00", img: "Sprite.jpeg", category: "Bebidas"},
+            ],
+            snacks: [
+                {name: "Tostitos Preparados", price: "$50.00", img: "Tostitos_prep.jpeg", category: "Snacks"},
+                {name: "Pepihuates", price: "$25.00", img: "Pepihuates.jpeg", category: "Snacks"},
+            ],
+            dulces: [
+                {name: "Chocolate", price: "$8.00", img: "Chocolate.jpeg", category: "Dulces"},
+                {name: "Gomitas", price: "$7.00", img: "Gomitas.jpeg", category: "Dulces"},
+            ],
+            contacto: [
+                {name: "Teléfono: 123-456-789", price: "", img: null, type: "contacto"},
+                {name: "Correo: info@refresqueria.com", price: "", img: null, type: "contacto"},
+                {name: "Dirección: Av. Principal #123", price: "", img: null, type: "contacto"},
+            ],
+            sobre: [
+                {name: "Somos una refresquería familiar dedicada a ofrecer los mejores productos frescos y deliciosos.", price: "", img: null, type: "info"},
+                {name: "Horario: Lunes a Domingo 8:00 AM - 10:00 PM", price: "", img: null, type: "info"},
+                {name: "¡Visítanos y descubre por qué somos los favoritos del barrio!", price: "", img: null, type: "info"},
+            ]
+        };
 
-    // Sistema del Carrito
-    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        // Sistema del Carrito
+        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    function guardarCarrito() {
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-        actualizarContadorCarrito();
-    }
-
-    function agregarAlCarrito(producto) {
-        const productoExistente = carrito.find(item => item.name === producto.name);
-        
-        if (productoExistente) {
-            productoExistente.cantidad += 1;
-        } else {
-            carrito.push({
-                ...producto,
-                cantidad: 1
-            });
+        function guardarCarrito() {
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            actualizarContadorCarrito();
         }
-        
-        guardarCarrito();
-        actualizarPanelCarrito();
-        mostrarNotificacion('Producto agregado al carrito');
-    }
 
-    function quitarDelCarrito(nombreProducto) {
-        carrito = carrito.filter(item => item.name !== nombreProducto);
-        guardarCarrito();
-        actualizarPanelCarrito();
-    }
-
-    function actualizarCantidad(nombreProducto, cambio) {
-        const producto = carrito.find(item => item.name === nombreProducto);
-        if (producto) {
-            producto.cantidad += cambio;
-            if (producto.cantidad <= 0) {
-                quitarDelCarrito(nombreProducto);
+        function agregarAlCarrito(producto) {
+            const productoExistente = carrito.find(item => item.name === producto.name);
+            
+            if (productoExistente) {
+                productoExistente.cantidad += 1;
             } else {
-                guardarCarrito();
-                actualizarPanelCarrito();
+                carrito.push({
+                    ...producto,
+                    cantidad: 1
+                });
             }
-        }
-    }
-
-    function actualizarContadorCarrito() {
-        const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
-        document.getElementById('cart-count').textContent = totalItems;
-    }
-
-    function actualizarPanelCarrito() {
-        const contenedorItems = document.getElementById('cart-items');
-        const totalElemento = document.getElementById('cart-total');
-        
-        let total = 0;
-        contenedorItems.innerHTML = '';
-
-        if (carrito.length === 0) {
-            contenedorItems.innerHTML = `
-                <div class="empty-cart">
-                    <span>🛒</span>
-                    <p>Tu carrito está vacío</p>
-                    <small>Agrega productos desde el menú</small>
-                </div>
-            `;
-        } else {
-            carrito.forEach(item => {
-                const precioNumerico = parseFloat(item.price.replace('$', '')) || 0;
-                const subtotal = precioNumerico * item.cantidad;
-                total += subtotal;
-
-                const elementoItem = document.createElement('div');
-                elementoItem.className = 'cart-item';
-                elementoItem.innerHTML = `
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <span class="cart-item-price">${item.price}</span>
-                    </div>
-                    <div class="cart-item-controls">
-                        <div class="quantity-controls">
-                            <button class="qty-btn" onclick="actualizarCantidad('${item.name}', -1)">−</button>
-                            <span class="quantity">${item.cantidad}</span>
-                            <button class="qty-btn" onclick="actualizarCantidad('${item.name}', 1)">+</button>
-                        </div>
-                        <button class="remove-btn" onclick="quitarDelCarrito('${item.name}')">
-                            🗑️
-                        </button>
-                    </div>
-                    <div class="cart-item-subtotal">
-                        $${subtotal.toFixed(2)}
-                    </div>
-                `;
-                contenedorItems.appendChild(elementoItem);
-            });
-        }
-
-        totalElemento.textContent = `$${total.toFixed(2)}`;
-        actualizarContadorCarrito();
-    }
-
-    // Sistema de Navegación
-    function showCategory(categoria) {
-        const contenedor = document.getElementById('products-container');
-        const tituloPagina = document.getElementById('page-title');
-        
-        // Actualizar menú activo
-        document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        
-        contenedor.innerHTML = '';
-        
-        if (categoria === 'inicio') {
-            mostrarVistaInicio(contenedor);
-            tituloPagina.textContent = 'Bienvenido a EL PORTON';
-        } else if (products[categoria]) {
-            tituloPagina.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
-            if (categoria === 'contacto' || categoria === 'sobre') {
-                mostrarInformacion(contenedor, products[categoria]);
-            } else {
-                mostrarProductos(contenedor, products[categoria]);
-            }
-        }
-        
-        // Cerrar sidebar en móviles
-        if (window.innerWidth <= 768) {
-            document.getElementById('sidebar').classList.remove('active');
-        }
-    }
-
-    function mostrarVistaInicio(contenedor) {
-        contenedor.innerHTML = `
-            <div class="welcome-hero">
-                <div class="hero-content">
-                    <h1>Bienvenido a Refresquería</h1>
-                    <h2>EL PORTON</h2>
-                    <p class="hero-description">
-                        Somos una refresquería familiar. Explora nuestras categorías desde la barra lateral 
-                        y agrega tus productos favoritos al carrito.
-                    </p>
-                    <div class="hero-features">
-                        <div class="feature">
-                            <span>🥤</span>
-                            <h3>Refrescos Fríos</h3>
-                            <p>La mejor selección de bebidas</p>
-                        </div>
-                        <div class="feature">
-                            <span>🍿</span>
-                            <h3>Snacks Deliciosos</h3>
-                            <p>Acompaña tu bebida</p>
-                        </div>
-                        <div class="feature">
-                            <span>🍬</span>
-                            <h3>Dulces Variados</h3>
-                            <p>Para el antojo dulce</p>
-                        </div>
-                    </div>
-                    <div class="promo-section">
-                        <h3>Promociones y Novedades</h3>
-                        <p>Visítanos frecuentemente para descubrir nuestras promociones especiales y nuevos productos.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    function mostrarProductos(contenedor, productos) {
-        if (productos.length === 0) {
-            contenedor.innerHTML = '<div class="empty-state">No hay productos disponibles en esta categoría.</div>';
-            return;
-        }
-
-        const grid = document.createElement('div');
-        grid.className = 'products-grid';
-        
-        productos.forEach(producto => {
-            const tarjeta = document.createElement('div');
-            tarjeta.className = 'product-card';
-            tarjeta.innerHTML = `
-                ${producto.img ? `
-                    <div class="product-image">
-                        <img src="${producto.img}" alt="${producto.name}" loading="lazy">
-                    </div>
-                ` : ''}
-                <div class="product-info">
-                    <h3 class="product-name">${producto.name}</h3>
-                    ${producto.category ? `<span class="product-category">${producto.category}</span>` : ''}
-                    <div class="product-price">${producto.price}</div>
-                    <button class="add-to-cart-btn" onclick="agregarAlCarrito(${JSON.stringify(producto).replace(/"/g, '&quot;')})">
-                        🛒 Agregar al Carrito
-                    </button>
-                </div>
-            `;
-            grid.appendChild(tarjeta);
-        });
-        
-        contenedor.appendChild(grid);
-    }
-
-    function mostrarInformacion(contenedor, informacion) {
-        const lista = document.createElement('div');
-        lista.className = 'info-list';
-        
-        informacion.forEach(item => {
-            const elemento = document.createElement('div');
-            elemento.className = 'info-item';
-            elemento.innerHTML = `
-                <div class="info-content">
-                    <p>${item.name}</p>
-                </div>
-            `;
-            lista.appendChild(elemento);
-        });
-        
-        contenedor.appendChild(lista);
-    }
-
-    function mostrarNotificacion(mensaje) {
-        // Crear notificación temporal
-        const notificacion = document.createElement('div');
-        notificacion.className = 'notification';
-        notificacion.textContent = mensaje;
-        document.body.appendChild(notificacion);
-        
-        setTimeout(() => {
-            notificacion.classList.add('show');
-        }, 100);
-        
-        setTimeout(() => {
-            notificacion.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notificacion);
-            }, 300);
-        }, 3000);
-    }
-
-    // Inicialización
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar vista de inicio
-        showCategory('inicio');
-        actualizarContadorCarrito();
-        
-        // Menu toggle para móviles
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
-        });
-        
-        // Carrito toggle
-        document.getElementById('ver-carrito').addEventListener('click', function() {
-            document.getElementById('cart-panel').classList.add('active');
-            document.getElementById('cart-backdrop').classList.add('active');
+            
+            guardarCarrito();
             actualizarPanelCarrito();
-        });
-        
-        // Cerrar carrito
-        document.getElementById('close-cart').addEventListener('click', cerrarCarrito);
-        document.getElementById('cart-backdrop').addEventListener('click', cerrarCarrito);
-        
-        function cerrarCarrito() {
-            document.getElementById('cart-panel').classList.remove('active');
-            document.getElementById('cart-backdrop').classList.remove('active');
+            mostrarNotificacion('Producto agregado al carrito');
         }
-        
-        // Vaciar carrito
-        document.getElementById('vaciar-carrito').addEventListener('click', function() {
-            if (carrito.length > 0) {
-                if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
-                    carrito = [];
+
+        function quitarDelCarrito(nombreProducto) {
+            carrito = carrito.filter(item => item.name !== nombreProducto);
+            guardarCarrito();
+            actualizarPanelCarrito();
+        }
+
+        function actualizarCantidad(nombreProducto, cambio) {
+            const producto = carrito.find(item => item.name === nombreProducto);
+            if (producto) {
+                producto.cantidad += cambio;
+                if (producto.cantidad <= 0) {
+                    quitarDelCarrito(nombreProducto);
+                } else {
                     guardarCarrito();
                     actualizarPanelCarrito();
-                    mostrarNotificacion('Carrito vaciado');
                 }
             }
-        });
-        
-        // Procesar pago
-        document.getElementById('pagar-carrito').addEventListener('click', function() {
+        }
+
+        function actualizarContadorCarrito() {
+            const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+
+        function actualizarPanelCarrito() {
+            const contenedorItems = document.getElementById('cart-items');
+            const totalElemento = document.getElementById('cart-total');
+            
+            let total = 0;
+            contenedorItems.innerHTML = '';
+
+            if (carrito.length === 0) {
+                contenedorItems.innerHTML = `
+                    <div class="empty-cart">
+                        <span>🛒</span>
+                        <p>Tu carrito está vacío</p>
+                        <small>Agrega productos desde el menú</small>
+                    </div>
+                `;
+            } else {
+                carrito.forEach(item => {
+                    const precioNumerico = parseFloat(item.price.replace('$', '')) || 0;
+                    const subtotal = precioNumerico * item.cantidad;
+                    total += subtotal;
+
+                    const elementoItem = document.createElement('div');
+                    elementoItem.className = 'cart-item';
+                    elementoItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <span class="cart-item-price">${item.price}</span>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="actualizarCantidad('${item.name}', -1)">−</button>
+                                <span class="quantity">${item.cantidad}</span>
+                                <button class="qty-btn" onclick="actualizarCantidad('${item.name}', 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="quitarDelCarrito('${item.name}')">
+                                🗑️
+                            </button>
+                        </div>
+                        <div class="cart-item-subtotal">
+                            $${subtotal.toFixed(2)}
+                        </div>
+                    `;
+                    contenedorItems.appendChild(elementoItem);
+                });
+            }
+
+            totalElemento.textContent = `$${total.toFixed(2)}`;
+            actualizarContadorCarrito();
+        }
+
+        // Sistema de Navegación
+        function showCategory(categoria) {
+            const contenedor = document.getElementById('products-container');
+            const tituloPagina = document.getElementById('page-title');
+            
+            // Actualizar menú activo
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            contenedor.innerHTML = '';
+            
+            if (categoria === 'inicio') {
+                mostrarVistaInicio(contenedor);
+                tituloPagina.textContent = 'Bienvenido a EL PORTON';
+            } else if (products[categoria]) {
+                tituloPagina.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+                if (categoria === 'contacto' || categoria === 'sobre') {
+                    mostrarInformacion(contenedor, products[categoria]);
+                } else {
+                    mostrarProductos(contenedor, products[categoria]);
+                }
+            }
+            
+            // Cerrar sidebar en móviles
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+
+        function mostrarVistaInicio(contenedor) {
+            contenedor.innerHTML = `
+                <div class="welcome-hero">
+                    <div class="hero-content">
+                        <h1>Bienvenido a Refresquería</h1>
+                        <h2>EL PORTON</h2>
+                        <p class="hero-description">
+                            Somos una refresquería familiar. Explora nuestras categorías desde la barra lateral 
+                            y agrega tus productos favoritos al carrito.
+                        </p>
+                        <p>Puedes ver nuestras promociones y novedades aquí.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function mostrarProductos(contenedor, productos) {
+            if (productos.length === 0) {
+                contenedor.innerHTML = '<div class="empty-state">No hay productos disponibles en esta categoría.</div>';
+                return;
+            }
+
+            const grid = document.createElement('div');
+            grid.className = 'products-grid';
+            
+            productos.forEach(producto => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'product-card';
+                tarjeta.innerHTML = `
+                    ${producto.img ? `
+                        <div class="product-image">
+                            <img src="${producto.img}" alt="${producto.name}" loading="lazy">
+                        </div>
+                    ` : ''}
+                    <div class="product-info">
+                        <h3 class="product-name">${producto.name}</h3>
+                        <div class="product-price">${producto.price}</div>
+                        <button class="add-to-cart-btn" onclick="agregarAlCarrito(${JSON.stringify(producto).replace(/"/g, '&quot;')})">
+                            🛒 Agregar al Carrito
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(tarjeta);
+            });
+            
+            contenedor.appendChild(grid);
+        }
+
+        function mostrarInformacion(contenedor, informacion) {
+            const lista = document.createElement('div');
+            lista.className = 'info-list';
+            
+            informacion.forEach(item => {
+                const elemento = document.createElement('div');
+                elemento.className = 'info-item';
+                elemento.innerHTML = `
+                    <div class="info-content">
+                        <p>${item.name}</p>
+                    </div>
+                `;
+                lista.appendChild(elemento);
+            });
+            
+            contenedor.appendChild(lista);
+        }
+
+        // Sistema de Modal de Pedido
+        function mostrarModalPedido() {
             if (carrito.length === 0) {
                 mostrarNotificacion('El carrito está vacío');
                 return;
             }
+            
+            // Resetear formulario
+            document.getElementById('input-nombre').value = '';
+            document.getElementById('input-correo').value = '';
+            document.getElementById('error-nombre').textContent = '';
+            document.getElementById('error-correo').textContent = '';
+            
+            // Mostrar modal
             document.getElementById('modal-datos').classList.add('active');
-        });
-        
-        // Modal de datos
-        document.getElementById('cancelar-datos').addEventListener('click', cerrarModal);
-        document.getElementById('cancelar-pedido').addEventListener('click', cerrarModal);
-        document.getElementById('modal-overlay').addEventListener('click', cerrarModal);
-        
-        function cerrarModal() {
+            
+            // Enfocar primer campo
+            setTimeout(() => {
+                document.getElementById('input-nombre').focus();
+            }, 300);
+        }
+
+        function cerrarModalPedido() {
             document.getElementById('modal-datos').classList.remove('active');
         }
-        
-        // Formulario de pedido
-        document.getElementById('form-datos').addEventListener('submit', function(e) {
+
+        function procesarPedido(e) {
             e.preventDefault();
             
             const nombre = document.getElementById('input-nombre').value.trim();
             const correo = document.getElementById('input-correo').value.trim();
             let valido = true;
             
-            // Validaciones
+            // Resetear errores
             document.getElementById('error-nombre').textContent = '';
             document.getElementById('error-correo').textContent = '';
             
+            // Validar nombre
             if (!nombre) {
                 document.getElementById('error-nombre').textContent = 'El nombre es obligatorio';
                 valido = false;
+            } else if (nombre.length < 2) {
+                document.getElementById('error-nombre').textContent = 'El nombre debe tener al menos 2 caracteres';
+                valido = false;
             }
             
+            // Validar correo
             if (!correo) {
-                document.getElementById('error-correo').textContent = 'El correo es obligatorio';
+                document.getElementById('error-correo').textContent = 'El correo electrónico es obligatorio';
                 valido = false;
             } else if (!/^\S+@\S+\.\S+$/.test(correo)) {
-                document.getElementById('error-correo').textContent = 'Correo electrónico no válido';
+                document.getElementById('error-correo').textContent = 'Ingresa un correo electrónico válido';
                 valido = false;
             }
             
@@ -499,101 +453,181 @@
                 estado: 'pendiente'
             };
             
+            // Mostrar loading
+            const btnConfirmar = document.getElementById('guardar-datos');
+            const textoOriginal = btnConfirmar.textContent;
+            btnConfirmar.textContent = 'Procesando...';
+            btnConfirmar.disabled = true;
+            
             // Guardar en Firebase
             db.collection("pedidos").add(datosPedido)
                 .then(() => {
-                    mostrarNotificacion('¡Pedido realizado con éxito!');
+                    mostrarNotificacion('¡Pedido realizado con éxito! Te contactaremos pronto.');
                     carrito = [];
                     guardarCarrito();
                     actualizarPanelCarrito();
-                    cerrarModal();
+                    cerrarModalPedido();
                     document.getElementById('form-datos').reset();
                 })
                 .catch(error => {
                     console.error("Error guardando pedido:", error);
                     mostrarNotificacion('Error al procesar el pedido. Intenta nuevamente.');
+                })
+                .finally(() => {
+                    btnConfirmar.textContent = textoOriginal;
+                    btnConfirmar.disabled = false;
                 });
-        });
-        
-        // Cerrar menú al hacer clic fuera en móviles
-        document.addEventListener('click', function(e) {
-            const sidebar = document.getElementById('sidebar');
-            const menuToggle = document.getElementById('menu-toggle');
-            
-            if (window.innerWidth <= 768 && 
-                sidebar.classList.contains('active') &&
-                !sidebar.contains(e.target) && 
-                e.target !== menuToggle) {
-                sidebar.classList.remove('active');
-            }
-        });
-    });
-
-    // Tema oscuro/claro (mantenido de tu código original)
-    (function(){
-        const input = document.getElementById('theme-toggle');
-        const root = document.documentElement;
-        const label = document.getElementById('theme-label');
-        if(!input || !label) return;
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-        function setLabel(theme) {
-            label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
         }
-        const applyTheme = (theme)=>{
-            root.classList.remove('dark','light');
-            if(theme === 'dark'){
-                root.classList.add('dark');
-                input.checked = true;
-            }
-            else if(theme === 'light'){
-                root.classList.add('light');
-                input.checked = false;
-            }
-            setLabel(theme);
-        };
 
-        if(stored === 'dark' || stored === 'light') applyTheme(stored);
-        else applyTheme(prefersDark ? 'dark' : 'light');
+        function mostrarNotificacion(mensaje, tipo = 'success') {
+            const notificacion = document.createElement('div');
+            notificacion.className = `notification ${tipo}`;
+            notificacion.textContent = mensaje;
+            
+            // Estilos para la notificación
+            notificacion.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${tipo === 'error' ? '#dc3545' : 'var(--primary)'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow);
+                z-index: 5000;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                font-weight: 500;
+                max-width: 300px;
+            `;
+            
+            document.body.appendChild(notificacion);
+            
+            setTimeout(() => {
+                notificacion.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notificacion.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (document.body.contains(notificacion)) {
+                        document.body.removeChild(notificacion);
+                    }
+                }, 300);
+            }, 4000);
+        }
 
-        input.addEventListener('change', ()=>{
-            const newTheme = input.checked ? 'dark' : 'light';
-            applyTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-    })();
-    // Manejo del menú móvil
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const cartBackdrop = document.getElementById('cart-backdrop');
-    
-    if (menuToggle && sidebar) {
-        menuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-        });
-        
-        // Cerrar menú al hacer clic fuera
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && 
-                sidebar.classList.contains('active') &&
-                !sidebar.contains(e.target) && 
-                e.target !== menuToggle) {
-                sidebar.classList.remove('active');
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar vista de inicio
+            showCategory('inicio');
+            actualizarContadorCarrito();
+            
+            // Menu toggle para móviles
+            document.getElementById('menu-toggle').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+            });
+            
+            // Carrito toggle
+            document.getElementById('ver-carrito').addEventListener('click', function() {
+                document.getElementById('cart-panel').classList.add('active');
+                document.getElementById('cart-backdrop').classList.add('active');
+                actualizarPanelCarrito();
+            });
+            
+            // Cerrar carrito
+            document.getElementById('close-cart').addEventListener('click', cerrarCarrito);
+            document.getElementById('cart-backdrop').addEventListener('click', cerrarCarrito);
+            
+            function cerrarCarrito() {
+                document.getElementById('cart-panel').classList.remove('active');
+                document.getElementById('cart-backdrop').classList.remove('active');
             }
-        });
-    }
-    
-    // Cerrar menú al seleccionar una opción
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
+            
+            // Vaciar carrito
+            document.getElementById('vaciar-carrito').addEventListener('click', function() {
+                if (carrito.length > 0) {
+                    if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                        carrito = [];
+                        guardarCarrito();
+                        actualizarPanelCarrito();
+                        mostrarNotificacion('Carrito vaciado');
+                    }
                 }
             });
-         });
-    });
+            
+            // Procesar pago
+            document.getElementById('pagar-carrito').addEventListener('click', mostrarModalPedido);
+            
+            // Modal de datos
+            document.getElementById('cancelar-datos').addEventListener('click', cerrarModalPedido);
+            document.getElementById('cancelar-pedido').addEventListener('click', cerrarModalPedido);
+            
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('modal-datos').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    cerrarModalPedido();
+                }
+            });
+            
+            // Cerrar modal con Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.getElementById('modal-datos').classList.contains('active')) {
+                    cerrarModalPedido();
+                }
+            });
+            
+            // Enviar formulario
+            document.getElementById('form-datos').addEventListener('submit', procesarPedido);
+            
+            // Cerrar menú al hacer clic fuera en móviles
+            document.addEventListener('click', function(e) {
+                const sidebar = document.getElementById('sidebar');
+                const menuToggle = document.getElementById('menu-toggle');
+                
+                if (window.innerWidth <= 768 && 
+                    sidebar.classList.contains('active') &&
+                    !sidebar.contains(e.target) && 
+                    e.target !== menuToggle) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        // Tema oscuro/claro
+        (function(){
+            const input = document.getElementById('theme-toggle');
+            const root = document.documentElement;
+            const label = document.getElementById('theme-label');
+            if(!input || !label) return;
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            function setLabel(theme) {
+                label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
+            }
+            const applyTheme = (theme)=>{
+                root.classList.remove('dark','light');
+                if(theme === 'dark'){
+                    root.classList.add('dark');
+                    input.checked = true;
+                }
+                else if(theme === 'light'){
+                    root.classList.add('light');
+                    input.checked = false;
+                }
+                setLabel(theme);
+            };
+
+            if(stored === 'dark' || stored === 'light') applyTheme(stored);
+            else applyTheme(prefersDark ? 'dark' : 'light');
+
+            input.addEventListener('change', ()=>{
+                const newTheme = input.checked ? 'dark' : 'light';
+                applyTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+        })();
     </script>
 
     <!-- Firebase -->

@@ -3,27 +3,335 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pedidos Guardados</title>
+  <title>Pedidos - Refresquería EL PORTON</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .pedido-lista { max-width: 600px; margin: 32px auto; background: var(--card-bg); border-radius: 10px; box-shadow: 0 4px 10px var(--shadow); padding: 24px; }
-    .pedido { border-bottom: 1px solid var(--border); padding: 16px 0; transition: background 0.3s; }
-    .pedido.entregado { background: #d4ffd4; opacity: 0.9; }
-    .btn-entregado[disabled] { opacity: 0.5; pointer-events: none; }
-    .pedido:last-child { border-bottom: none; }
-    .pedido-nombre { font-weight: bold; color: var(--accent); font-size: 1.1em; }
-    .pedido-fecha { color: var(--muted); font-size: 0.95em; }
-    .pedido-total { font-weight: bold; }
-    .pedido-productos { margin: 8px 0 0 0; padding-left: 18px; }
-    .volver-link { display: inline-block; margin-bottom: 18px; color: var(--accent); text-decoration: underline; }
-    .acciones { margin-top:10px; display:flex; gap:8px; }
+    /* Estilos específicos para la página de pedidos */
+    .pedidos-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .pedidos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .volver-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .volver-link:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .pedidos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+      gap: 20px;
+    }
+
+    .pedido-card {
+      background: var(--light);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .pedido-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .pedido-card.entregado {
+      border-left-color: var(--secondary);
+      background: linear-gradient(135deg, var(--light) 0%, #f0fff0 100%);
+    }
+
+    .pedido-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .pedido-cliente {
+      flex: 1;
+    }
+
+    .pedido-nombre {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .pedido-correo {
+      color: var(--gray);
+      font-size: 0.9em;
+    }
+
+    .pedido-correo a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .pedido-correo a:hover {
+      text-decoration: underline;
+    }
+
+    .pedido-fecha {
+      background: var(--gray-light);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      color: var(--dark);
+      white-space: nowrap;
+    }
+
+    .pedido-productos {
+      margin: 15px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .producto-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .producto-item:last-child {
+      border-bottom: none;
+    }
+
+    .producto-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .producto-cantidad {
+      background: var(--primary);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .producto-nombre {
+      font-weight: 500;
+    }
+
+    .producto-precio {
+      color: var(--gray);
+      font-size: 0.9em;
+    }
+
+    .pedido-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+    }
+
+    .pedido-total {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .pedido-acciones {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9em;
+    }
+
+    .btn-entregado {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-entregado:hover:not(:disabled) {
+      background: #27a69a;
+      transform: translateY(-1px);
+    }
+
+    .btn-entregado:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-eliminar {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-eliminar:hover {
+      background: #c0392b;
+      transform: translateY(-1px);
+    }
+
+    .estado-entregado {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--secondary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 600;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+      font-size: 1.1em;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+    }
+
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .filtros {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .filtro-btn {
+      background: var(--gray-light);
+      border: 2px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .filtro-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .pedidos-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .pedido-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .pedido-fecha {
+        align-self: flex-start;
+      }
+      
+      .pedido-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+      
+      .pedido-acciones {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .filtros {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pedidos-container {
+        padding: 15px;
+      }
+      
+      .pedido-card {
+        padding: 15px;
+      }
+      
+      .pedido-acciones {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="pedido-lista">
-    <a href="index.html" class="volver-link">← Volver a la tienda</a>
-    <h1>Pedidos Guardados</h1>
-    <div id="pedidos-container"></div>
+  <div class="pedidos-container">
+    <div class="pedidos-header">
+      <h1>Pedidos Guardados</h1>
+      <a href="index.html" class="volver-link">
+        ← Volver a la Tienda
+      </a>
+    </div>
+
+    <div class="filtros">
+      <button class="filtro-btn active" data-filtro="todos">Todos los Pedidos</button>
+      <button class="filtro-btn" data-filtro="pendientes">Pendientes</button>
+      <button class="filtro-btn" data-filtro="entregados">Entregados</button>
+    </div>
+
+    <div id="pedidos-container">
+      <div class="loading">Cargando pedidos...</div>
+    </div>
   </div>
 
   <!-- Firebase -->
@@ -46,102 +354,214 @@
     }
     const db = firebase.firestore();
 
+    let todosLosPedidos = [];
+    let filtroActual = 'todos';
+
     function formatFecha(valor) {
       if(!valor) return '';
       // Si es Timestamp de Firestore
       if(valor.toDate && typeof valor.toDate === 'function') {
-        return valor.toDate().toLocaleString();
+        return valor.toDate().toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
       }
       // Si es string ISO
       try {
         const d = new Date(valor);
-        if(!isNaN(d)) return d.toLocaleString();
+        if(!isNaN(d)) return d.toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
       } catch(e){}
       // fallback
       return String(valor);
     }
 
-    function renderPedidos() {
+    function aplicarFiltro() {
+      const pedidosFiltrados = filtroActual === 'todos' 
+        ? todosLosPedidos 
+        : todosLosPedidos.filter(pedido => 
+            filtroActual === 'entregados' ? pedido.entregado : !pedido.entregado
+          );
+      
+      renderPedidos(pedidosFiltrados);
+    }
+
+    function renderPedidos(pedidos) {
       const cont = document.getElementById('pedidos-container');
-      cont.innerHTML = '<p>Cargando pedidos...</p>';
+      
+      if (pedidos.length === 0) {
+        cont.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">📦</div>
+            <h3>No hay pedidos ${filtroActual !== 'todos' ? filtroActual : ''}</h3>
+            <p>${filtroActual === 'todos' ? 'Cuando los clientes realicen pedidos, aparecerán aquí.' : 
+                filtroActual === 'pendientes' ? 'Todos los pedidos han sido entregados.' : 
+                'Aún no hay pedidos entregados.'}</p>
+          </div>
+        `;
+        return;
+      }
 
-      db.collection("pedidos")
-        .orderBy("fecha", "desc")
-        .onSnapshot(snapshot => {
-          cont.innerHTML = "";
+      cont.innerHTML = '<div class="pedidos-grid"></div>';
+      const grid = cont.querySelector('.pedidos-grid');
 
-          if (snapshot.empty) {
-            cont.innerHTML = '<p>No hay pedidos guardados.</p>';
-            return;
-          }
+      pedidos.forEach(pedido => {
+        const div = document.createElement('div');
+        div.className = `pedido-card ${pedido.entregado ? 'entregado' : ''}`;
 
-          snapshot.forEach(doc => {
-            const p = doc.data();
-            const div = document.createElement('div');
-            div.className = 'pedido';
+        const fechaTexto = formatFecha(pedido.fecha);
 
-            const fechaTexto = formatFecha(p.fecha);
-
-            div.innerHTML = `
-              <div class="pedido-nombre">${p.nombre || '—'}</div>
-              <div class="pedido-fecha">${fechaTexto}</div>
-              <div class="pedido-correo"><strong>Correo:</strong> <a href="mailto:${p.correo}">${p.correo}</a></div>
-              <ul class="pedido-productos">
-                ${ (p.productos || []).map(prod => `<li>${prod.qty} x ${prod.name} (${prod.price})</li>`).join('') }
-              </ul>
-              <div class="pedido-total">Total: $${p.total}</div>
-              <div class="acciones">
-                <button class="btn-entregado">Entregado</button>
-                <button class="btn-eliminar" style="background:#e74c3c;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Eliminar</button>
+        div.innerHTML = `
+          ${pedido.entregado ? '<div class="estado-entregado">Entregado ✓</div>' : ''}
+          <div class="pedido-header">
+            <div class="pedido-cliente">
+              <div class="pedido-nombre">${pedido.nombre || 'Cliente'}</div>
+              <div class="pedido-correo">
+                <a href="mailto:${pedido.correo}">${pedido.correo}</a>
               </div>
-            `;
+            </div>
+            <div class="pedido-fecha">${fechaTexto}</div>
+          </div>
+          
+          <ul class="pedido-productos">
+            ${(pedido.productos || []).map(prod => `
+              <li class="producto-item">
+                <div class="producto-info">
+                  <span class="producto-cantidad">${prod.cantidad || prod.qty || 1}</span>
+                  <span class="producto-nombre">${prod.name}</span>
+                </div>
+                <span class="producto-precio">${prod.price}</span>
+              </li>
+            `).join('')}
+          </ul>
+          
+          <div class="pedido-footer">
+            <div class="pedido-total">Total: $${pedido.total}</div>
+            <div class="pedido-acciones">
+              ${!pedido.entregado ? `
+                <button class="btn btn-entregado" data-id="${pedido.id}">
+                  Marcar Entregado
+                </button>
+              ` : ''}
+              <button class="btn btn-eliminar" data-id="${pedido.id}">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        `;
 
-            // Entregado
-            const btnEntregado = div.querySelector('.btn-entregado');
-            btnEntregado.addEventListener('click', () => {
-              if(btnEntregado.disabled) return;
-              if(confirm('¿Marcar este pedido como entregado y notificar al cliente?')) {
-                // Visual
-                div.classList.add('entregado');
-                btnEntregado.disabled = true;
-                btnEntregado.textContent = 'Entregado ✓';
-
-                // Intento de notificación por mail (abre cliente de correo)
-                const cuerpo = encodeURIComponent(`Hola ${p.nombre},
+        // Evento para marcar como entregado
+        if (!pedido.entregado) {
+          const btnEntregado = div.querySelector('.btn-entregado');
+          btnEntregado.addEventListener('click', () => {
+            if(confirm(`¿Marcar el pedido de ${pedido.nombre} como entregado?`)) {
+              // Aquí podrías actualizar el estado en Firebase si quisieras persistir el estado
+              pedido.entregado = true;
+              aplicarFiltro();
+              
+              // Abrir cliente de correo para notificación
+              const cuerpo = encodeURIComponent(`Hola ${pedido.nombre},
 
 Tu pedido realizado el ${fechaTexto} ha sido entregado.
 
 Desglose:
-${ (p.productos || []).map(prod => `- ${prod.qty} x ${prod.name} (${prod.price})`).join('\n') }
+${ (pedido.productos || []).map(prod => `- ${prod.cantidad || prod.qty || 1} x ${prod.name} (${prod.price})`).join('\n') }
 
-Total: $${p.total}
+Total: $${pedido.total}
 
-¡Gracias por tu compra!`);
-                window.location.href = `mailto:${p.correo}?subject=¡Tu pedido ha sido entregado!&body=${cuerpo}`;
-              }
-            });
+¡Gracias por tu compra en Refresquería EL PORTON!
 
-            // Eliminar
-            const btnEliminar = div.querySelector('.btn-eliminar');
-            btnEliminar.addEventListener('click', () => {
-              if(confirm('¿Eliminar este pedido?')) {
-                db.collection('pedidos').doc(doc.id).delete()
-                  .catch(err => {
-                    console.error('Error eliminando pedido:', err);
-                    alert('No se pudo eliminar el pedido.');
-                  });
-              }
-            });
-
-            cont.appendChild(div);
+Atentamente,
+El equipo de EL PORTON`);
+              window.open(`mailto:${pedido.correo}?subject=¡Tu pedido ha sido entregado!&body=${cuerpo}`);
+            }
           });
+        }
+
+        // Evento para eliminar pedido
+        const btnEliminar = div.querySelector('.btn-eliminar');
+        btnEliminar.addEventListener('click', () => {
+          if(confirm(`¿Eliminar el pedido de ${pedido.nombre}? Esta acción no se puede deshacer.`)) {
+            db.collection('pedidos').doc(pedido.id).delete()
+              .then(() => {
+                // Remover del array local
+                todosLosPedidos = todosLosPedidos.filter(p => p.id !== pedido.id);
+                aplicarFiltro();
+              })
+              .catch(err => {
+                console.error('Error eliminando pedido:', err);
+                alert('No se pudo eliminar el pedido.');
+              });
+          }
+        });
+
+        grid.appendChild(div);
+      });
+    }
+
+    function cargarPedidos() {
+      const cont = document.getElementById('pedidos-container');
+      cont.innerHTML = '<div class="loading">Cargando pedidos...</div>';
+
+      db.collection("pedidos")
+        .orderBy("fecha", "desc")
+        .onSnapshot(snapshot => {
+          todosLosPedidos = [];
+          
+          if (snapshot.empty) {
+            cont.innerHTML = `
+              <div class="empty-state">
+                <div class="icon">📦</div>
+                <h3>No hay pedidos guardados</h3>
+                <p>Cuando los clientes realicen pedidos desde la tienda, aparecerán aquí.</p>
+              </div>
+            `;
+            return;
+          }
+
+          snapshot.forEach(doc => {
+            todosLosPedidos.push({
+              id: doc.id,
+              ...doc.data(),
+              entregado: false // Por defecto, podrías guardar este estado en Firebase si lo necesitas
+            });
+          });
+
+          aplicarFiltro();
         }, err => {
           console.error('Error leyendo pedidos:', err);
-          document.getElementById('pedidos-container').innerHTML = '<p>Error cargando pedidos.</p>';
+          document.getElementById('pedidos-container').innerHTML = `
+            <div class="empty-state">
+              <div class="icon">⚠️</div>
+              <h3>Error cargando pedidos</h3>
+              <p>No se pudieron cargar los pedidos. Intenta recargar la página.</p>
+            </div>
+          `;
         });
     }
 
-    document.addEventListener('DOMContentLoaded', renderPedidos);
+    // Configurar filtros
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarPedidos();
+      
+      // Event listeners para filtros
+      document.querySelectorAll('.filtro-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filtroActual = btn.dataset.filtro;
+          aplicarFiltro();
+        });
+      });
+    });
   </script>
 </body>
 </html>
