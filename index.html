@@ -43,27 +43,27 @@
                 </div>
             </div>
             <div class="menu-items">
-                <button class="menu-item active" onclick="showCategory('inicio')">
+                <button class="menu-item active" onclick="showCategory('inicio', this)">
                     <span class="menu-icon">🏠</span>
                     <span class="menu-text">Inicio</span>
                 </button>
-                <button class="menu-item" onclick="showCategory('refrescos')">
+                <button class="menu-item" onclick="showCategory('refrescos', this)">
                     <span class="menu-icon">🥤</span>
                     <span class="menu-text">Refrescos</span>
                 </button>
-                <button class="menu-item" onclick="showCategory('snacks')">
+                <button class="menu-item" onclick="showCategory('snacks', this)">
                     <span class="menu-icon">🍿</span>
                     <span class="menu-text">Snacks</span>
                 </button>
-                <button class="menu-item" onclick="showCategory('dulces')">
+                <button class="menu-item" onclick="showCategory('dulces', this)">
                     <span class="menu-icon">🍬</span>
                     <span class="menu-text">Dulces</span>
                 </button>
-                <button class="menu-item" onclick="showCategory('contacto')">
+                <button class="menu-item" onclick="showCategory('contacto', this)">
                     <span class="menu-icon">📞</span>
                     <span class="menu-text">Contacto</span>
                 </button>
-                <button class="menu-item" onclick="showCategory('sobre')">
+                <button class="menu-item" onclick="showCategory('sobre', this)">
                     <span class="menu-icon">ℹ️</span>
                     <span class="menu-text">Sobre Nosotros</span>
                 </button>
@@ -163,8 +163,8 @@
                     <strong id="cart-total">$0.00</strong>
                 </div>
                 <div class="cart-actions">
-                    <button id="vaciar-carrito" class="btn btn-outline">Vaciar Carrito</button>
-                    <button id="pagar-carrito" class="btn btn-primary">Procesar Pago</button>
+                    <button type="button" id="vaciar-carrito" class="btn btn-outline">Vaciar Carrito</button>
+                    <button type="button" id="pagar-carrito" class="btn btn-primary">Procesar Pago</button>
                 </div>
             </div>
         </div>

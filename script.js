@@ -154,7 +154,7 @@ function actualizarPanelCarrito() {
     actualizarContadorCarrito();
 }
 
-// FUNCIONES PARA ABRIR Y CERRAR EL CARRITO - CORREGIDAS
+// FUNCIONES PARA ABRIR Y CERRAR EL CARRITO
 function abrirCarrito() {
     console.log('Abriendo carrito...');
     const cartPanel = document.getElementById('cart-panel');
@@ -183,20 +183,24 @@ function cerrarCarrito() {
 }
 
 // Sistema de Navegación
-function showCategory(categoria) {
+function showCategory(categoria, elemento = null) {
     const contenedor = document.getElementById('products-container');
     const tituloPagina = document.getElementById('page-title');
     
     if (!contenedor || !tituloPagina) return;
     
     // Actualizar menú activo
-    document.querySelectorAll('.menu-item').forEach(item => {
-        if (item.onclick && item.onclick.toString().includes(categoria)) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
+    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+    
+    if (elemento) {
+        elemento.classList.add('active');
+    } else {
+        // Si no hay elemento, buscar el botón correspondiente
+        const botonCategoria = document.querySelector(`[onclick*="${categoria}"]`);
+        if (botonCategoria) {
+            botonCategoria.classList.add('active');
         }
-    });
+    }
     
     contenedor.innerHTML = '';
     
@@ -744,7 +748,7 @@ function inicializarPedidos() {
     });
 }
 
-// Inicialización general - CORREGIDA
+// Inicialización general
 function inicializarApp() {
     console.log('Inicializando aplicación...');
     
@@ -762,7 +766,7 @@ function inicializarApp() {
         // Inicializar vista de inicio
         showCategory('inicio');
         
-        // CONFIGURACIÓN DEL CARRITO - CORREGIDA
+        // CONFIGURACIÓN DEL CARRITO
         const verCarrito = document.getElementById('ver-carrito');
         const verCarritoDesktop = document.getElementById('ver-carrito-desktop');
         const closeCart = document.getElementById('close-cart');
@@ -774,16 +778,12 @@ function inicializarApp() {
         if (verCarrito) {
             verCarrito.addEventListener('click', abrirCarrito);
             console.log('Botón carrito móvil configurado');
-        } else {
-            console.error('No se encontró el botón del carrito móvil');
         }
         
         // Botón carrito desktop
         if (verCarritoDesktop) {
             verCarritoDesktop.addEventListener('click', abrirCarrito);
             console.log('Botón carrito desktop configurado');
-        } else {
-            console.error('No se encontró el botón del carrito desktop');
         }
         
         // Cerrar carrito
