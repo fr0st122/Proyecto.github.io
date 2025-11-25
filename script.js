@@ -18,10 +18,10 @@ const db = firebase.firestore();
 /// Configuración de productos ACTUALIZADA - CON RUTAS CORREGIDAS:
 const products = {
     refrescos: [
-        {name: "Cocacola", price: "$20.00", img: "imagenes/Cocacola.png", category: "Bebidas"},
-        {name: "Sangria", price: "$20.00", img: "imagenes/Sangria.png", category: "Bebidas"},
-        {name: "Sprite", price: "$20.00", img: "imagenes/Sprite.png", category: "Bebidas"},
-        {name: "Fanta Fresa", price: "$20.00", img: "imagenes/Fanta_Fresa.png", category: "Bebidas"},
+        {name: "Cocacola", price: "$20.00", img: "imagenes/Cocacola.jpg", category: "Bebidas"},
+        {name: "Sangria", price: "$20.00", img: "imagenes/Sangria.jpg", category: "Bebidas"},
+        {name: "Sprite", price: "$20.00", img: "imagenes/Sprite.jpg", category: "Bebidas"},
+        {name: "Fanta Fresa", price: "$20.00", img: "imagenes/Fanta_Fresa.jpg", category: "Bebidas"},
     ],
     snacks: [
         {name: "Tostitos preparados", price: "$50.00", img: "imagenes/Tostitos_prep.jpeg", category: "Snacks"},
