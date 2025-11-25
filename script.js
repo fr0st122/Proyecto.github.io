@@ -748,9 +748,43 @@ function inicializarPedidos() {
     });
 }
 
+// SOLUCIÓN ESPECÍFICA PARA EL CARRITO DESKTOP
+function forzarCarritoDesktop() {
+    const botonDesktop = document.getElementById('ver-carrito-desktop');
+    
+    if (botonDesktop) {
+        console.log('🔧 Configurando carrito desktop...');
+        
+        // Forzar visibilidad
+        botonDesktop.style.display = 'flex';
+        botonDesktop.style.visibility = 'visible';
+        botonDesktop.style.opacity = '1';
+        botonDesktop.style.position = 'fixed';
+        botonDesktop.style.top = '20px';
+        botonDesktop.style.right = '20px';
+        botonDesktop.style.zIndex = '1001';
+        
+        // Remover cualquier event listener existente
+        const nuevoBoton = botonDesktop.cloneNode(true);
+        botonDesktop.parentNode.replaceChild(nuevoBoton, botonDesktop);
+        
+        // Agregar nuevo event listener
+        nuevoBoton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Botón desktop clickeado');
+            abrirCarrito();
+        });
+        
+        console.log('✅ Carrito desktop configurado correctamente');
+    } else {
+        console.error('❌ No se encontró el botón del carrito desktop');
+    }
+}
+
 // Inicialización general
 function inicializarApp() {
-    console.log('Inicializando aplicación...');
+    console.log('🚀 Inicializando aplicación...');
     
     // Inicializar tema
     inicializarTema();
@@ -758,17 +792,19 @@ function inicializarApp() {
     // Inicializar carrito
     actualizarContadorCarrito();
     
+    // SOLUCIÓN PARA CARRITO DESKTOP - EJECUTAR INMEDIATAMENTE
+    forzarCarritoDesktop();
+    
     // Verificar si estamos en la página principal
     const productsContainer = document.getElementById('products-container');
     if (productsContainer) {
-        console.log('Inicializando página principal...');
+        console.log('🏠 Inicializando página principal...');
         
         // Inicializar vista de inicio
         showCategory('inicio');
         
-        // CONFIGURACIÓN DEL CARRITO
+        // CONFIGURACIÓN DEL CARRITO MÓVIL
         const verCarrito = document.getElementById('ver-carrito');
-        const verCarritoDesktop = document.getElementById('ver-carrito-desktop');
         const closeCart = document.getElementById('close-cart');
         const cartBackdrop = document.getElementById('cart-backdrop');
         const pagarCarrito = document.getElementById('pagar-carrito');
@@ -777,13 +813,7 @@ function inicializarApp() {
         // Botón carrito móvil
         if (verCarrito) {
             verCarrito.addEventListener('click', abrirCarrito);
-            console.log('Botón carrito móvil configurado');
-        }
-        
-        // Botón carrito desktop
-        if (verCarritoDesktop) {
-            verCarritoDesktop.addEventListener('click', abrirCarrito);
-            console.log('Botón carrito desktop configurado');
+            console.log('📱 Botón carrito móvil configurado');
         }
         
         // Cerrar carrito
@@ -870,24 +900,30 @@ function inicializarApp() {
             }
         });
         
-        console.log('Página principal inicializada correctamente');
+        console.log('✅ Página principal inicializada correctamente');
     }
     
     // Verificar si estamos en la página de pedidos
     const pedidosContainer = document.getElementById('pedidos-container');
     if (pedidosContainer) {
-        console.log('Inicializando página de pedidos...');
+        console.log('📦 Inicializando página de pedidos...');
         inicializarPedidos();
     }
     
-    console.log('Aplicación inicializada correctamente');
+    console.log('🎉 Aplicación inicializada correctamente');
 }
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', inicializarApp);
 
-// También inicializar cuando la ventana se carga completamente
+// Ejecutar solución para carrito desktop después de que cargue la página
 window.addEventListener('load', function() {
-    console.log('Página completamente cargada');
+    console.log('📄 Página completamente cargada');
     actualizarContadorCarrito();
+    
+    // Ejecutar solución para carrito desktop nuevamente por si acaso
+    setTimeout(forzarCarritoDesktop, 500);
 });
+
+// Ejecutar una vez más después de un tiempo por si hay problemas de timing
+setTimeout(forzarCarritoDesktop, 1000);
