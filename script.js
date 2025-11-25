@@ -15,23 +15,23 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// Configuración de productos ACTUALIZADA
+/// Configuración de productos ACTUALIZADA - CON RUTAS CORREGIDAS:
 const products = {
     refrescos: [
-        {name: "Cocacola", price: "$20.00", img: "Cocacola.png", category: "Bebidas"},
-        {name: "Sangria", price: "$20.00", img: "Sangria.png", category: "Bebidas"},
-        {name: "Sprite", price: "$20.00", img: "Sprite.png", category: "Bebidas"},
-        {name: "Fanta Fresa", price: "$20.00", img: "Fanta_Fresa.png", category: "Bebidas"},
+        {name: "Cocacola", price: "$20.00", img: "imagenes/Cocacola.png", category: "Bebidas"},
+        {name: "Sangria", price: "$20.00", img: "imagenes/Sangria.png", category: "Bebidas"},
+        {name: "Sprite", price: "$20.00", img: "imagenes/Sprite.png", category: "Bebidas"},
+        {name: "Fanta Fresa", price: "$20.00", img: "imagenes/Fanta_Fresa.png", category: "Bebidas"},
     ],
     snacks: [
-        {name: "Tostitos preparados", price: "$50.00", img: "Tostitos_prep.jpeg", category: "Snacks"},
-        {name: "Pepihuates", price: "$25.00", img: "Pepihuates.jpeg", category: "Snacks"},
-        {name: "Raspado de vainilla CH", price: "$25.00", img: "Ras_Vainilla.jpeg", category: "Snacks"},
-        {name: "Raspado de ciruela CH", price: "$25.00", img: "Ras_Ciruela.jpeg", category: "Snacks"},
+        {name: "Tostitos preparados", price: "$50.00", img: "imagenes/Tostitos_prep.jpeg", category: "Snacks"},
+        {name: "Pepihuates", price: "$25.00", img: "imagenes/Pepihuates.jpeg", category: "Snacks"},
+        {name: "Raspado de vainilla CH", price: "$25.00", img: "imagenes/Ras_Vainilla.jpeg", category: "Snacks"},
+        {name: "Raspado de ciruela CH", price: "$25.00", img: "imagenes/Ras_Ciruela.jpeg", category: "Snacks"},
     ],
     dulces: [
-        {name: "Chocolate", price: "$8.00", img: "Nugs.png", category: "Dulces"},
-        {name: "Gomitas", price: "$7.00", img: "Gomitas.png", category: "Dulces"},
+        {name: "Chocolate", price: "$8.00", img: "imagenes/Nugs.png", category: "Dulces"},
+        {name: "Gomitas", price: "$7.00", img: "imagenes/Gomitas.png", category: "Dulces"},
     ],
     contacto: [
         {name: "Teléfono: 123-456-789", price: "", img: null, type: "contacto"},
