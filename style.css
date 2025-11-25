@@ -1553,3 +1553,110 @@ body {
     background: var(--secondary);
     color: white;
 }
+/* ===== CORRECCIONES PARA EL BOTÓN CARRITO ESCRITORIO ===== */
+
+/* Asegurar que se oculte completamente en móviles */
+@media (max-width: 1023px) {
+    .carrito-escritorio-btn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+}
+
+/* Asegurar que se muestre solo en escritorio */
+@media (min-width: 1024px) {
+    .carrito-escritorio-btn {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
+}
+
+/* Mejorar visibilidad en modo oscuro */
+.dark .carrito-escritorio-btn {
+    background: linear-gradient(135deg, var(--primary), #e64a19);
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.dark .carrito-escritorio-btn:hover {
+    background: linear-gradient(135deg, #e64a19, #bf360c);
+}
+
+.dark .carrito-texto {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.dark .carrito-contador {
+    background: var(--secondary);
+    color: white !important;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+
+/* Forzar colores en modo oscuro */
+.dark .carrito-escritorio-btn,
+.dark .carrito-escritorio-btn * {
+    color: white !important;
+}
+
+/* Asegurar que el botón viejo esté siempre oculto */
+#ver-carrito-desktop {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Mejorar el z-index para evitar superposiciones */
+.carrito-escritorio-btn {
+    z-index: 1001;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+/* Asegurar que en móvil el header tenga buen z-index */
+.mobile-header {
+    z-index: 1000;
+}
+
+/* Prevenir superposiciones en todos los dispositivos */
+@media (max-width: 767px) {
+    .carrito-escritorio-btn {
+        display: none !important;
+    }
+    
+    .mobile-header {
+        z-index: 1000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    .content-area {
+        margin-top: 60px; /* Compensar el header fijo */
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .carrito-escritorio-btn {
+        display: none !important;
+    }
+}
+
+/* Animación para el contador */
+@keyframes bounce {
+    0%, 20%, 60%, 100% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(1.2);
+    }
+    80% {
+        transform: scale(1.1);
+    }
+}

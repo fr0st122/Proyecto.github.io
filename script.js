@@ -111,6 +111,16 @@ function actualizarContadorEscritorio() {
     if (contadorEscritorio) {
         contadorEscritorio.textContent = totalItems;
         
+        // Aplicar colores para modo oscuro
+        const esModoOscuro = document.documentElement.classList.contains('dark');
+        if (esModoOscuro) {
+            contadorEscritorio.style.color = 'white';
+            contadorEscritorio.style.background = '#2ec4b6';
+        } else {
+            contadorEscritorio.style.color = 'var(--dark)';
+            contadorEscritorio.style.background = 'var(--secondary)';
+        }
+        
         // Animación cuando hay productos
         if (totalItems > 0) {
             contadorEscritorio.style.animation = 'bounce 0.5s ease';
@@ -209,26 +219,67 @@ function inicializarCarritoEscritorio() {
     if (botonEscritorio) {
         console.log('🖥️ Inicializando nuevo botón carrito escritorio...');
         
-        // Agregar event listener
-        botonEscritorio.addEventListener('click', function(e) {
+        // Remover event listeners existentes
+        const nuevoBoton = botonEscritorio.cloneNode(true);
+        botonEscritorio.parentNode.replaceChild(nuevoBoton, botonEscritorio);
+        
+        // Agregar nuevo event listener
+        nuevoBoton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('🖱️ Nuevo botón desktop clickeado');
             abrirCarrito();
         });
         
-        // Forzar estilos
-        botonEscritorio.style.display = 'flex';
-        botonEscritorio.style.visibility = 'visible';
-        botonEscritorio.style.opacity = '1';
-        botonEscritorio.style.position = 'fixed';
-        botonEscritorio.style.top = '20px';
-        botonEscritorio.style.right = '20px';
-        botonEscritorio.style.zIndex = '1001';
+        // Aplicar estilos forzados para visibilidad
+        aplicarEstilosCarritoEscritorio(nuevoBoton);
         
         console.log('✅ Nuevo botón carrito escritorio configurado');
+        return nuevoBoton;
     } else {
         console.error('❌ No se encontró el nuevo botón carrito escritorio');
+        return null;
+    }
+}
+
+function aplicarEstilosCarritoEscritorio(boton) {
+    if (!boton) return;
+    
+    // Estilos base
+    boton.style.display = 'flex';
+    boton.style.visibility = 'visible';
+    boton.style.opacity = '1';
+    boton.style.position = 'fixed';
+    boton.style.top = '20px';
+    boton.style.right = '20px';
+    boton.style.zIndex = '1001';
+    boton.style.pointerEvents = 'all';
+    
+    // Ocultar en móviles
+    if (window.innerWidth <= 1023) {
+        boton.style.display = 'none';
+        boton.style.visibility = 'hidden';
+        boton.style.opacity = '0';
+        boton.style.pointerEvents = 'none';
+    }
+    
+    // Forzar colores para modo oscuro
+    const esModoOscuro = document.documentElement.classList.contains('dark');
+    if (esModoOscuro) {
+        boton.style.color = 'white';
+        boton.style.background = 'linear-gradient(135deg, #ff6b35, #e64a19)';
+        
+        // Aplicar a elementos hijos
+        const texto = boton.querySelector('.carrito-texto');
+        const contador = boton.querySelector('.carrito-contador');
+        
+        if (texto) {
+            texto.style.color = 'white';
+        }
+        if (contador) {
+            contador.style.color = 'white';
+            contador.style.background = '#2ec4b6';
+        }
     }
 }
 
@@ -236,14 +287,29 @@ function configurarCarritos() {
     console.log('🔧 Configurando todos los carritos...');
     
     // Configurar el nuevo botón de escritorio
-    inicializarCarritoEscritorio();
+    const botonEscritorio = inicializarCarritoEscritorio();
     
-    // Ocultar el botón viejo por si acaso
+    // Aplicar estilos iniciales
+    if (botonEscritorio) {
+        aplicarEstilosCarritoEscritorio(botonEscritorio);
+    }
+    
+    // Ocultar completamente el botón viejo
     const botonViejo = document.getElementById('ver-carrito-desktop');
     if (botonViejo) {
         botonViejo.style.display = 'none';
         botonViejo.style.visibility = 'hidden';
+        botonViejo.style.opacity = '0';
+        botonViejo.style.pointerEvents = 'none';
     }
+    
+    // Configurar responsive
+    window.addEventListener('resize', function() {
+        const botonActual = document.getElementById('carrito-escritorio');
+        if (botonActual) {
+            aplicarEstilosCarritoEscritorio(botonActual);
+        }
+    });
 }
 
 // Sistema de Navegación
@@ -518,15 +584,54 @@ function inicializarTema() {
     const applyTheme = (theme) => {
         console.log('Aplicando tema:', theme);
         root.classList.remove('dark','light');
+        
         if (theme === 'dark') {
             root.classList.add('dark');
             if (inputMobile) inputMobile.checked = true;
             if (inputDesktop) inputDesktop.checked = true;
+            
+            // Aplicar estilos para modo oscuro al botón de carrito
+            setTimeout(() => {
+                const botonCarrito = document.getElementById('carrito-escritorio');
+                if (botonCarrito) {
+                    botonCarrito.style.color = 'white';
+                    botonCarrito.style.background = 'linear-gradient(135deg, #ff6b35, #e64a19)';
+                    
+                    const texto = botonCarrito.querySelector('.carrito-texto');
+                    const contador = botonCarrito.querySelector('.carrito-contador');
+                    
+                    if (texto) texto.style.color = 'white';
+                    if (contador) {
+                        contador.style.color = 'white';
+                        contador.style.background = '#2ec4b6';
+                    }
+                }
+            }, 100);
+            
         } else {
             root.classList.add('light');
             if (inputMobile) inputMobile.checked = false;
             if (inputDesktop) inputDesktop.checked = false;
+            
+            // Aplicar estilos para modo claro al botón de carrito
+            setTimeout(() => {
+                const botonCarrito = document.getElementById('carrito-escritorio');
+                if (botonCarrito) {
+                    botonCarrito.style.color = 'white';
+                    botonCarrito.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-dark))';
+                    
+                    const texto = botonCarrito.querySelector('.carrito-texto');
+                    const contador = botonCarrito.querySelector('.carrito-contador');
+                    
+                    if (texto) texto.style.color = 'white';
+                    if (contador) {
+                        contador.style.color = 'var(--dark)';
+                        contador.style.background = 'var(--secondary)';
+                    }
+                }
+            }, 100);
         }
+        
         setLabels(theme);
     };
 
@@ -971,7 +1076,33 @@ window.addEventListener('load', function() {
     actualizarContadorEscritorio();
     
     // Reforzar configuración del carrito escritorio
-    setTimeout(configurarCarritos, 500);
+    setTimeout(configurarCarritos, 100);
+    
+    // Verificar modo oscuro y aplicar estilos
+    setTimeout(() => {
+        const esModoOscuro = document.documentElement.classList.contains('dark');
+        const botonCarrito = document.getElementById('carrito-escritorio');
+        
+        if (botonCarrito && esModoOscuro) {
+            botonCarrito.style.color = 'white';
+            const texto = botonCarrito.querySelector('.carrito-texto');
+            const contador = botonCarrito.querySelector('.carrito-contador');
+            
+            if (texto) texto.style.color = 'white';
+            if (contador) {
+                contador.style.color = 'white';
+                contador.style.background = '#2ec4b6';
+            }
+        }
+    }, 200);
+});
+
+// Manejar cambios de tamaño de ventana
+window.addEventListener('resize', function() {
+    const botonEscritorio = document.getElementById('carrito-escritorio');
+    if (botonEscritorio) {
+        aplicarEstilosCarritoEscritorio(botonEscritorio);
+    }
 });
 
 // Ejecutar una vez más después de un tiempo
