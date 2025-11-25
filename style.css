@@ -1432,3 +1432,251 @@ body {
     margin-bottom: 15px;
     opacity: 0.5;
 }
+
+/* ===== CORRECCIONES ESPECÍFICAS PARA LAPTOPS ===== */
+
+/* LAPTOPS (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .content-area {
+        margin-left: 280px;
+        padding: 20px;
+    }
+    
+    .sidebar {
+        width: 280px;
+    }
+    
+    /* Asegurar que el carrito desktop sea visible */
+    .cart-btn-desktop {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Ocultar elementos móviles */
+    .mobile-header {
+        display: none !important;
+    }
+}
+
+/* CORRECCIONES PARA EL CARRITO EN LAPTOPS */
+@media (min-width: 1024px) {
+    .cart-panel {
+        width: 400px;
+        right: -400px;
+    }
+    
+    .cart-panel.active {
+        right: 0;
+    }
+    
+    /* Asegurar que el backdrop cubra toda la pantalla */
+    .cart-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* MEJORAS EN MODO OSCURO */
+.dark .product-card {
+    background: var(--light);
+    color: var(--texto-oscuro);
+}
+
+.dark .product-name {
+    color: var(--texto-oscuro);
+}
+
+.dark .product-price {
+    color: var(--primary);
+}
+
+.dark .info-item {
+    background: var(--light);
+    color: var(--texto-oscuro);
+}
+
+.dark .form-input-pedido {
+    background: var(--light);
+    color: var(--texto-oscuro);
+    border-color: var(--border);
+}
+
+.dark .form-input-pedido:focus {
+    border-color: var(--primary);
+}
+
+.dark .btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.dark .btn-outline:hover {
+    background: var(--primary);
+    color: var(--light);
+}
+
+/* CORRECCIÓN PARA LOS BOTONES DE CARRITO */
+.cart-btn-mobile,
+.cart-btn-desktop {
+    position: relative;
+    z-index: 1002;
+}
+
+/* MEJORAS EN LA GRILLA DE PRODUCTOS */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+/* CORRECCIÓN PARA EL SIDEBAR EN DIFERENTES DISPOSITIVOS */
+@media (max-width: 1023px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .content-area {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        transform: translateX(0) !important;
+    }
+    
+    .content-area {
+        margin-left: 280px;
+    }
+}
+
+/* CORRECCIÓN PARA LOS CONTADORES DEL CARRITO */
+.cart-count {
+    background: var(--secondary);
+    color: var(--dark);
+    font-weight: bold;
+}
+
+.dark .cart-count {
+    color: var(--light);
+}
+
+/* MEJORAS EN LA TIPOGRAFÍA EN MODO OSCURO */
+.dark body {
+    color: var(--texto-oscuro);
+}
+
+.dark .page-title {
+    color: var(--primary);
+}
+
+.dark .content-area {
+    background: var(--gray-light);
+}
+
+/* CORRECCIÓN PARA LOS MODALES EN MODO OSCURO */
+.dark .modal-pedido-content {
+    background: var(--light);
+    color: var(--texto-oscuro);
+}
+
+.dark .form-label-pedido {
+    color: var(--texto-oscuro);
+}
+
+/* ESTILOS PARA LOS PEDIDOS EN MODO OSCURO */
+.dark .pedido-card {
+    background: var(--light);
+    color: var(--texto-oscuro);
+}
+
+.dark .pedido-nombre {
+    color: var(--texto-oscuro);
+}
+
+.dark .estadistica-card {
+    background: var(--light);
+    color: var(--texto-oscuro);
+}
+
+.dark .filtros-container {
+    background: var(--light);
+    color: var(--texto-oscuro);
+}
+
+.dark .filtro-btn {
+    background: var(--gray-light);
+    color: var(--texto-oscuro);
+    border-color: var(--border);
+}
+
+.dark .filtro-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* CORRECCIÓN PARA EL SCROLL EN EL CARRITO */
+.cart-items {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* MEJORAS EN EL DISEÑO RESPONSIVO */
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .product-card {
+        padding: 15px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+/* ANIMACIONES MEJORADAS */
+.cart-panel {
+    transition: right 0.3s ease-in-out;
+}
+
+.sidebar {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* CORRECCIÓN PARA LOS BOTONES DE CANTIDAD EN MODO OSCURO */
+.dark .quantity-controls {
+    background: var(--gray-light);
+}
+
+.dark .qty-btn {
+    background: var(--primary);
+    color: white;
+}
+
+/* CORRECCIÓN PARA LOS PRECIOS EN EL CARRITO */
+.dark .cart-item-price {
+    color: var(--texto-medio);
+}
+
+.dark .cart-item-subtotal {
+    color: var(--primary);
+}

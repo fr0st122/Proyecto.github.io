@@ -409,7 +409,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     }, 4000);
 }
 
-/// Sistema de Tema CORREGIDO
+// Sistema de Tema CORREGIDO
 function inicializarTema() {
     const inputMobile = document.getElementById('theme-toggle-mobile');
     const inputDesktop = document.getElementById('theme-toggle-desktop');
@@ -746,6 +746,27 @@ function inicializarPedidos() {
     });
 }
 
+// Función para ajustar el grid según el tamaño de pantalla
+function ajustarGridResponsivo() {
+    const ancho = window.innerWidth;
+    const contenedor = document.getElementById('products-container');
+    
+    if (!contenedor) return;
+    
+    const grid = contenedor.querySelector('.products-grid');
+    if (!grid) return;
+    
+    if (ancho >= 1200) {
+        grid.style.gridTemplateColumns = 'repeat(4, 1fr)';
+    } else if (ancho >= 1024) {
+        grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    } else if (ancho >= 768) {
+        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    } else {
+        grid.style.gridTemplateColumns = '1fr';
+    }
+}
+
 // Inicialización general
 function inicializarApp() {
     // Inicializar tema
@@ -753,6 +774,10 @@ function inicializarApp() {
     
     // Inicializar carrito
     actualizarContadorCarrito();
+    
+    // Inicializar grid responsivo
+    ajustarGridResponsivo();
+    window.addEventListener('resize', ajustarGridResponsivo);
     
     // Verificar si estamos en la página principal
     const productsContainer = document.getElementById('products-container');
